@@ -5,18 +5,36 @@ function Play() {
 
 	const startVideo = () => {
 		setPlaying(true);
-		navigator.getUserMedia(
-			{
-				video: true,
-			},
-			(stream) => {
-				let video = document.getElementsByClassName('app__videoFeed')[0];
+		// navigator.getUserMedia(
+		// 	{
+		// 		video: true,
+		// 	},
+		// 	(stream) => {
+		// 		let video = document.getElementsByClassName('app__videoFeed')[0];
+		// 		if (video) {
+		// 			video.srcObject = stream;
+		// 		}
+		// 	},
+		// 	(err) => console.error(err)
+		// );
+		var constraints = { audio: true, video: true }
+		async function getMedia(constraints) {
+			let stream = null;
+		  
+			try {
+			  stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+			  /* use the stream */
+			  let video = document.getElementsByClassName('app__videoFeed')[0];
 				if (video) {
 					video.srcObject = stream;
+					console.log('video available')
 				}
-			},
-			(err) => console.error(err)
-		);
+			} catch(err) {
+			  /* handle the error */
+			  console.log(err)
+			}
+		  }
+		  getMedia()
 	};
 
 	const stopVideo = () => {
@@ -55,7 +73,7 @@ function Play() {
 				<view
 				style={{flex: 1}}
 				>
-					<h1>Test</h1>
+					<button onClick={stopVideo}>Stop</button>
 				</view>
 		
 			</div>
