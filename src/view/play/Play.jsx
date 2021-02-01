@@ -1,36 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom'
 
 function Play() {
-	const [playing, setPlaying] = useState(false);
 
 	const startVideo = () => {
-		setPlaying(true);
-		// navigator.getUserMedia(
-		// 	{
-		// 		video: true,
-		// 	},
-		// 	(stream) => {
-		// 		let video = document.getElementsByClassName('app__videoFeed')[0];
-		// 		if (video) {
-		// 			video.srcObject = stream;
-		// 		}
-		// 	},
-		// 	(err) => console.error(err)
-		// );
-		var constraints = { audio: true, video: true }
-		async function getMedia(constraints) {
+		async function getMedia() {
 			let stream = null;
-		  
+			const constraints = {
+				audio: true, 
+				video: {
+						frameRate: { ideal: 15, max: 20 },
+						mirrored: false, 
+						width: 1280, 
+						height: 720 ,
+					}, 
+				facingMode: "user"
+			}
 			try {
-			  stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-			  /* use the stream */
+			  stream = await navigator.mediaDevices.getUserMedia(constraints);
 			  let video = document.getElementsByClassName('app__videoFeed')[0];
 				if (video) {
 					video.srcObject = stream;
 					console.log('video available')
 				}
 			} catch(err) {
-			  /* handle the error */
 			  console.log(err)
 			}
 		  }
@@ -38,9 +31,9 @@ function Play() {
 	};
 
 	const stopVideo = () => {
-		setPlaying(false);
+		console.log('video unAvailable')
 		let video = document.getElementsByClassName('app__videoFeed')[0];
-		video.srcObject.getTracks()[0].stop();
+		video.srcObject.getTracks().forEach((track) => track.stop());
 	};
 
 	useEffect(() => {
@@ -49,33 +42,22 @@ function Play() {
 
 	return (
 		<div className="app">
-			<div className='container' style={{ 
-				textAlign: 'center',
-			 alignItems: 'center', 
-			  boxSizing: 'border-box',
-				height: '100%',
-				overflow: 'hidden',
-				width: '100%', }}>
+			<div className='container'>
 				<video
 					playsInline
-					fluid={false}
 					muted
 					autoPlay
-					
-					style={{ 
-						// aspectRatio: 1 / 2, 
-						height: '100%',
-						overflow: 'hidden',
-						maxWidth: '100%'
-					}}
+					resize
+					stopVideo={true}
 					className="app__videoFeed"
-				></video>
-				<view
-				style={{flex: 1}}
-				>
-					<button onClick={stopVideo}>Stop</button>
+				/>
+				<view className='viewText'>
+					<button onClick={stopVideo}>
+						<Link to='/home'>
+							Stop
+						</Link>
+						</button>
 				</view>
-		
 			</div>
 		</div>
 	);
