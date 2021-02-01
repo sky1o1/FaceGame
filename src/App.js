@@ -8,7 +8,6 @@ import PrivateRoute from '../src/common/PrivateRoute';
 import Home from '../src/view/Home/Home' ;
 import Sidebar from '../src/view/sidebar/Sidebar';
 import Profile from '../src/view/profile/Profile';
-import Register from '../src/view/auth/Register';
 import Login from '../src/view/auth/Login';
 import './App.css';
 import Play from './view/play/Play';

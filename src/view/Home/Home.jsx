@@ -7,12 +7,16 @@ import { makeStyles, Grid, Card, Button } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import footer from '../../assets/image/GIF.png';
+import logo from '../../assets/image/logo.png';
 
+import '../../assets/css/style.css'
 const useStyles = makeStyles((theme) => ({
     gridBtn: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center'
+
     },
     btn: {
         // textDecoration: 'none',
@@ -35,48 +39,46 @@ function Home() {
     }
 
     return (
-        <Grid container className={classes.gridBtn}>
-            {/* <Grid xs={2}>
-               <Sidebar />
-           </Grid> */}
+        <div className="App HomeBody">
 
-            <Grid list xs={4}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    // className='App-logo'
-                    startIcon={<SportsEsportsIcon />}
-                >
-                    <Link to='/play'>
-                    Play
-                    </Link>
+
+          <div class='box'>
+            <div class='wave -one'></div>
+            <div class='wave -two'></div>
+            <div class='wave -three'></div>
+            <div class='title'>
+            <img src={logo} style={{width:250,height:'auto'}}/>
+            </div>
+            <div className="container4">
+                    <div className="inner_container">
                     
-                </Button>
-            </Grid>
+                      <Link to='/play' className="game_font">
+                          <a class="fancy-button bg-gradient1 green"><span class="game_font"><i class="fa fa-wheelchair-alt"></i>
+                            Play
+                          </span></a>
+                        </Link>
 
-            <Grid list xs={4}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<PersonIcon />}
-                >
-                     <Link to='/profile'>
-                    Profile
-                    </Link>
-                </Button>
-            </Grid>
+                        <Link to='/profile' className="game_font">
+                          <a class="fancy-button bg-gradient1 green"><span class="game_font"><i class="fa fa-wheelchair-alt"></i>
+                            Profile
+                          </span></a>
+                        </Link>
 
-            <Grid list xs={4}>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={logout}
-                    startIcon={<ExitToAppIcon />}
-                >
-                    Exit
-                </Button>
-            </Grid>
-        </Grid>
+                        <Link onClick={logout} className="game_font">
+                          <a class="fancy-button bg-gradient1 green"><span class="game_font"><i class="fa fa-wheelchair-alt"></i>
+                            Leave
+                          </span></a>
+                        </Link>
+                      </div>
+                    
+                    <img className="footer" src={footer}/>
+                </div> 
+          </div>
+
+
+      
+      </div>
+      
     )
 }
 

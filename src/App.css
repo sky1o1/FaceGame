@@ -35,27 +35,118 @@
 
 .container {
   display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100vh;
-	overflow: hidden;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 100vh;
+			overflow: hidden;
 }
-
 .app__videoFeed {
   position: relative;
-	top: 0;
-	left: 0;
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	-webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
+						top: 0;
+						left: 0;
+						display: block;
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+						-webkit-transform: scaleX(-1);
+  						transform: scaleX(-1);
 }
 
-.viewText {
-position: absolute;
+
+.emoji_bar {
+  position: absolute;
+  /* background-color: rgb(0, 0, 0); */
+  height:45px;
+  width:100%;
+  top:12%;
+  -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+  -moz-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+  border:5px solid #e6e6e6; 
+  background: #e65c00;  
+  /* background: -webkit-linear-gradient(to right, #1f1f1f, #e65c00);   */
+  background: linear-gradient(to right, #F9D423, #e65c00);
+}
+
+
+.progress {
+  height: 30px;
+  width: 300px;
+  background-color: lightgray;
+  border-radius: 20px;
+}
+
+.progress-done {
+  height: 100%;
+  width: 0;
+  opacity: 0;
+  background: linear-gradient(to left, #f2709c,#ff9472);
+  color: #fff;
+  border-radius: 20px;
   display: flex;
-  padding: 20;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
+  transition: 1s ease;
+}
+
+.right{
+  z-index: 2000;
+  position: absolute;
+  top:35px;
+  left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:15px;
+  
+  background-color: #262626;
+  border:5px solid #ebc097; 
+  border-radius: 50%;
+  color:#fff;
+  width:250px;
+  right:0;
+}
+
+.emoji{
+  background-color: tomato;
+  width:80px;
+  height:80px;
+  margin-top: -17px;
+  border-radius:50%;
+  border:3px solid #e65c00;
+  margin-right:10px
+  
+}
+
+
+.slider {
+  
+  position: relative;
+  animation: myfirst 5s linear  infinite;
+  width:600px
+}
+@-webkit-keyframes myfirst {
+  0% {
+    left: 160%;
+  }
+  100% {
+    left: -160%;
+  }
+}
+@-moz-keyframes myfirst {
+  0% {
+    left: 160%;
+  }
+  100% {
+    left: -160%;
+  }
+}
+@keyframes myfirst {
+  0% {
+    left: 160%;
+  }
+  100% {
+    left: -160%;
+  }
 }

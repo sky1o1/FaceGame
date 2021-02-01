@@ -84,7 +84,7 @@ export default function ClippedDrawer() {
               Welcome
              </Typography>
             <Button color="white"><Link style={{color: "white", textDecoration: 'none'}} to="/login">Login</Link></Button>
-           <Button color="white"><Link style={{color: "white", textDecoration: 'none'}} to="/register">Register</Link></Button>
+        
         </Toolbar>
       </AppBar>
       </Grid>
