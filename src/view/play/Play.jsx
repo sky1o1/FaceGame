@@ -101,30 +101,30 @@ const collision = () => {
 	var div2Top = document.getElementById('div2').getBoundingClientRect().top
 	var div2Left = document.getElementById('div2').getBoundingClientRect().left
 
-	// var div3Height = document.getElementById('div3').getBoundingClientRect().height
-	// var div3Width = document.getElementById('div3').getBoundingClientRect().width
-	// var div3Top = document.getElementById('div3').getBoundingClientRect().top
-	// var div3Left = document.getElementById('div3').getBoundingClientRect().left
+	var div3Height = document.getElementById('div3').getBoundingClientRect().height
+	var div3Width = document.getElementById('div3').getBoundingClientRect().width
+	var div3Top = document.getElementById('div3').getBoundingClientRect().top
+	var div3Left = document.getElementById('div3').getBoundingClientRect().left
 
-	// var div4Height = document.getElementById('div4').getBoundingClientRect().height
-	// var div4Width = document.getElementById('div4').getBoundingClientRect().width
-	// var div4Top = document.getElementById('div4').getBoundingClientRect().top
-	// var div4Left = document.getElementById('div4').getBoundingClientRect().left
+	var div4Height = document.getElementById('div4').getBoundingClientRect().height
+	var div4Width = document.getElementById('div4').getBoundingClientRect().width
+	var div4Top = document.getElementById('div4').getBoundingClientRect().top
+	var div4Left = document.getElementById('div4').getBoundingClientRect().left
 
-	// var div5Height = document.getElementById('div5').getBoundingClientRect().height
-	// var div5Width = document.getElementById('div5').getBoundingClientRect().width
-	// var div5Top = document.getElementById('div5').getBoundingClientRect().top
-	// var div5Left = document.getElementById('div5').getBoundingClientRect().left
+	var div5Height = document.getElementById('div5').getBoundingClientRect().height
+	var div5Width = document.getElementById('div5').getBoundingClientRect().width
+	var div5Top = document.getElementById('div5').getBoundingClientRect().top
+	var div5Left = document.getElementById('div5').getBoundingClientRect().left
 
-	// var div6Height = document.getElementById('div6').getBoundingClientRect().height
-	// var div6Width = document.getElementById('div6').getBoundingClientRect().width
-	// var div6Top = document.getElementById('div6').getBoundingClientRect().top
-	// var div6Left = document.getElementById('div6').getBoundingClientRect().left
+	var div6Height = document.getElementById('div6').getBoundingClientRect().height
+	var div6Width = document.getElementById('div6').getBoundingClientRect().width
+	var div6Top = document.getElementById('div6').getBoundingClientRect().top
+	var div6Left = document.getElementById('div6').getBoundingClientRect().left
 
-	// var div7Height = document.getElementById('div7').getBoundingClientRect().height
-	// var div7Width = document.getElementById('div7').getBoundingClientRect().width
-	// var div7Top = document.getElementById('div7').getBoundingClientRect().top
-	// var div7Left = document.getElementById('div7').getBoundingClientRect().left
+	var div7Height = document.getElementById('div7').getBoundingClientRect().height
+	var div7Width = document.getElementById('div7').getBoundingClientRect().width
+	var div7Top = document.getElementById('div7').getBoundingClientRect().top
+	var div7Left = document.getElementById('div7').getBoundingClientRect().left
 
 
 	  
@@ -133,38 +133,38 @@ const collision = () => {
 			setPoints(points + 1)	
   }
 
-//   if (div1Left < (div3Left + div3Width)  && (div1Left + div1Width)  > div3Left &&
-// 	div1Top < (div3Top + div3Height) && (div1Top + div1Height) > div3Top) {
-// 		setPoints(points + 2)
-// }
+  if (div1Left < (div3Left + div3Width)  && (div1Left + div1Width)  > div3Left &&
+	div1Top < (div3Top + div3Height) && (div1Top + div1Height) > div3Top) {
+		setPoints(points + 2)
+}
 
 
 
-// if (div1Left < (div4Left + div4Width ) && (div1Left + div1Width)  > div4Left &&
-// 	div1Top < (div4Top + div4Height) && (div1Top + div1Height) > div4Top) {
-// 		setPoints(points + 3)
+if (div1Left < (div4Left + div4Width ) && (div1Left + div1Width)  > div4Left &&
+	div1Top < (div4Top + div4Height) && (div1Top + div1Height) > div4Top) {
+		setPoints(points + 3)
 		
-// }
+}
 
 
-// if (div1Left < (div5Left + div5Width)  && (div1Left + div1Width)  > div5Left &&
-// 	div1Top < (div5Top + div5Height) && (div1Top + div1Height) > div5Top) {
-// 		setPoints(points + 4)
+if (div1Left < (div5Left + div5Width)  && (div1Left + div1Width)  > div5Left &&
+	div1Top < (div5Top + div5Height) && (div1Top + div1Height) > div5Top) {
+		setPoints(points + 4)
 		
-// }
+}
 
 
-// if (div1Left < (div6Left + div6Width)  && (div1Left + div1Width)  > div6Left &&
-// 	div1Top < (div6Top + div6Height) && (div1Top + div1Height) > div6Top) {
-// 		setPoints(points + 5)
+if (div1Left < (div6Left + div6Width)  && (div1Left + div1Width)  > div6Left &&
+	div1Top < (div6Top + div6Height) && (div1Top + div1Height) > div6Top) {
+		setPoints(points + 5)
 		
-// }
+}
 
 
-// if (div1Left < (div7Left + div7Width)  && (div1Left + div1Width)  > div7Left &&
-// 	div1Top < (div7Top + div7Height) && (div1Top + div1Height) > div7Top) {
-// 		setPoints(points + 6)
-// }
+if (div1Left < (div7Left + div7Width)  && (div1Left + div1Width)  > div7Left &&
+	div1Top < (div7Top + div7Height) && (div1Top + div1Height) > div7Top) {
+		setPoints(points + 6)
+}
 
 
 
@@ -194,7 +194,7 @@ useEffect(() => {
 
 useEffect(() => {
 	collision();
-}, [])
+})
 
 
 console.log(points)
@@ -238,11 +238,11 @@ console.log(points)
 						// 	}}
 						 className="slider">
 							<img id='div2' src={emoji1} className="emoji" />
-							{/* <img id='div3' src={emoji2} className="emoji" />
+							<img id='div3' src={emoji2} className="emoji" />
 							<img id='div4' src={emoji3} className="emoji" />
 							<img id='div5' src={emoji4} className="emoji" />
 							<img id='div6' src={emoji5} className="emoji" />
-							<img id='div7' src={emoji6} className="emoji" /> */}
+							<img id='div7' src={emoji6} className="emoji" />
 						</div>
 
 
