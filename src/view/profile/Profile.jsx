@@ -41,7 +41,7 @@ const profile = useSelector(state => state.profile)
             <div class="high_score_points">7000</div>
             <div class="separator"></div>
             <div class="username_player">
-              Player sanjeeb
+              Player {profile.username}
             </div>
               </div> 
                
