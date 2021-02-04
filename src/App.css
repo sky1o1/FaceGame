@@ -134,7 +134,7 @@
 .slider {
   position: relative;
   animation: myfirst 5s linear  infinite;
-  width:600px
+  width: 2000px
 }
 
 @-webkit-keyframes myfirst {
@@ -161,3 +161,6 @@
     left: -160%;
   }
 }
+
+
+
