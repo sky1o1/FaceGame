@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useRef, createRef } from 'react';
-import logo from '../../assets/image/logo.png';
+import React, { useState, useEffect } from 'react';
 import footer from '../../assets/gif/gif.gif';
-import { Link, useHistory } from "react-router-dom";
-import Button from '@material-ui/core/Button';
+import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import emoji1 from '../../assets/emoji/emoji1-01.png';
 import emoji2 from '../../assets/emoji/emoji2-01.png';
 import emoji3 from '../../assets/emoji/emoji3-01.png';
@@ -16,8 +12,8 @@ import emoji4 from '../../assets/emoji/emoji4-01.png';
 import emoji5 from '../../assets/emoji/emoji5-01.png';
 import emoji6 from '../../assets/emoji/emoji6-01.png';
 import audio from '../../assets/sound/sad.mp3';
-import { motion, animate } from 'framer-motion';
-import Script from '../emojiDetection/Script';
+import {motion} from 'framer-motion';
+
 
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {
@@ -34,119 +30,177 @@ const BorderLinearProgress = withStyles((theme) => ({
 	},
 }))(LinearProgress);
 
-
-const useStyles = makeStyles((theme) => ({
-	slider: {
-		position: 'relative',
-		animation: 'myfirst 5s linear  infinite',
-		width: '1000px'
-	}
-}))
-
 function Play() {
-	const [progress, setProgress] = useState(0)
-	const [points, setPoints] = useState(0)
+	const [progress, setProgress] = useState(0);
+	const [points, setPoints] = useState({
+		initialPoints: 0,
+		finalPoints: 0
+	})
 	const [timerAnimation, setTimerAnimation] = useState(5)
-	const classes = useStyles()
+	const [happyEmoji, setHappyEmoji] = useState(0)
+	const [score, setScore] = useState(0)
+
+
+	useEffect(() => {
+		// const audioEl = document.getElementsByClassName("audio-element")[0]
+		// audioEl.play()
+
+		const timer = setInterval(() => {
+			setProgress((oldProgress) => {
+				if (oldProgress === 100) {
+					return 0;
+				}
+				const diff = Math.random() * 10;
+				return Math.min(oldProgress + diff, 100);
+			});
+		}, 500);
+
+		return () => {
+			clearInterval(timer);
+		};
+	}, []);
+
+	
+
 
 
 	const collision = () => {
-		var div1Height = document.getElementById('div1').getBoundingClientRect().height
-		var div1Width = document.getElementById('div1').getBoundingClientRect().width
-		var div1Top = document.getElementById('div1').getBoundingClientRect().top
-		var div1Left = document.getElementById('div1').getBoundingClientRect().left
+		var sbottom = document.getElementById('startDiv').getBoundingClientRect().bottom
+		var sright = document.getElementById('startDiv').getBoundingClientRect().right
+		var stop = document.getElementById('startDiv').getBoundingClientRect().top
+		var sleft = document.getElementById('startDiv').getBoundingClientRect().left
 
-		var div2Height = document.getElementById('div2').getBoundingClientRect().height
-		var div2Width = document.getElementById('div2').getBoundingClientRect().width
-		var div2Top = document.getElementById('div2').getBoundingClientRect().top
-		var div2Left = document.getElementById('div2').getBoundingClientRect().left
+		var pbottom = document.getElementById('endDiv').getBoundingClientRect().bottom
+		var pright = document.getElementById('endDiv').getBoundingClientRect().right
+		var ptop = document.getElementById('endDiv').getBoundingClientRect().top
+		var pleft = document.getElementById('endDiv').getBoundingClientRect().left
 
-		var div3Height = document.getElementById('div3').getBoundingClientRect().height
-		var div3Width = document.getElementById('div3').getBoundingClientRect().width
-		var div3Top = document.getElementById('div3').getBoundingClientRect().top
-		var div3Left = document.getElementById('div3').getBoundingClientRect().left
-
-		var div4Height = document.getElementById('div4').getBoundingClientRect().height
-		var div4Width = document.getElementById('div4').getBoundingClientRect().width
-		var div4Top = document.getElementById('div4').getBoundingClientRect().top
-		var div4Left = document.getElementById('div4').getBoundingClientRect().left
-		// if (div1Left < (div2Left + div2Width) && (div1Left + div1Width) > div2Left &&
-		// 	div1Top < (div2Top + div2Height) && (div1Top + div1Height) > div2Top) {
-		// 	console.log(' collision 1')
-		// }
-
-		// if (div1Left < (div3Left + div3Width) && (div1Left + div1Width) > div3Left &&
-		// 	div1Top < (div3Top + div3Height) && (div1Top + div1Height) > div3Top) {
-		// 	console.log(' collision 2')
-		// }
-
-		// if (div1Left < (div4Left + div4Width) && (div1Left + div1Width) > div4Left &&
-		// 	div1Top < (div4Top + div4Height) && (div1Top + div1Height) > div4Top) {
-		// 	console.log(' collision 3')
-
-		// }
+		var e1bottom = document.getElementById('div2').getBoundingClientRect().bottom
+		var e1right = document.getElementById('div2').getBoundingClientRect().right
+		var e1top = document.getElementById('div2').getBoundingClientRect().top
+		var e1left = document.getElementById('div2').getBoundingClientRect().left
 
 
-		// if (div1Left < (div5Left + div5Width) && (div1Left + div1Width) > div5Left &&
-		// 	div1Top < (div5Top + div5Height) && (div1Top + div1Height) > div5Top) {
-		// 	console.log(' collision 4')
+		var e2bottom = document.getElementById('div3').getBoundingClientRect().bottom
+		var e2right = document.getElementById('div3').getBoundingClientRect().right
+		var e2top = document.getElementById('div3').getBoundingClientRect().top
+		var e2left = document.getElementById('div3').getBoundingClientRect().left
 
-		// }
-
-
-		// if (div1Left < (div6Left + div6Width) && (div1Left + div1Width) > div6Left &&
-		// 	div1Top < (div6Top + div6Height) && (div1Top + div1Height) > div6Top) {
-		// 	console.log(' collision 5')
-
-		// }
+		var e3bottom = document.getElementById('div4').getBoundingClientRect().bottom
+		var e3right = document.getElementById('div4').getBoundingClientRect().right
+		var e3top = document.getElementById('div4').getBoundingClientRect().top
+		var e3left = document.getElementById('div4').getBoundingClientRect().left
 
 
-		// if (div1Left < (div7Left + div7Width) && (div1Left + div1Width) > div7Left &&
-		// 	div1Top < (div7Top + div7Height) && (div1Top + div1Height) > div7Top) {
-		// 	console.log(' collision 6')
-		// }
+// emoji1
+		if(((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)))
+		 {      
+			console.log(' end collision')
+			if(happyEmoji == 0){
+				setScore(score+5)
+				console.log('ssssss', score)
+				setPoints(prevState => ({
+					...prevState, finalPoints: score
+				}))
+				setHappyEmoji(1)
+				
+				
+				if((points.finalPoints - points.initialPoints) == 10){
+					console.log(points.finalPoints , points.initialPoints)
+					setPoints(prevState => ({
+						...prevState, initialPoints: score
+					}))
+					setTimerAnimation(timerAnimation - 3)
+				}
+			}
+		  }
+
+		  if(((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom)))
+		 {      
+			console.log(' start collision')
+			// setTimerAnimation( timerAnimation - 1)
+			// console.log(timerAnimation)
+			if(happyEmoji == 1){
+				setHappyEmoji(0)
+			}
+		  }
 
 
+// emoji2
 
 
-		var pbottom = document.getElementById('div1').getBoundingClientRect().bottom
-		var pright = document.getElementById('div1').getBoundingClientRect().right
-		var ptop = document.getElementById('div1').getBoundingClientRect().top
-		var pleft = document.getElementById('div1').getBoundingClientRect().left
+		//   if(((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)))
+		//  {      
+		// 	console.log(' collision')
+		// 	// setTimerAnimation( timerAnimation - 1)
+		// 	// console.log(timerAnimation)
+		// 	if(happyEmoji == 0){
+		// 		score = score+5;
+		// 		setHappyEmoji(1)
+		// 		console.log(happyEmoji, score)
+		// 	}
+		//   }
 
-		var pcbottom = document.getElementById('div2').getBoundingClientRect().bottom
-		var pcright = document.getElementById('div2').getBoundingClientRect().right
-		var pctop = document.getElementById('div2').getBoundingClientRect().top
-		var pcleft = document.getElementById('div2').getBoundingClientRect().left
+		//   if(((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom)))
+		//  {      
+		// 	console.log(' collision')
+		// 	// setTimerAnimation( timerAnimation - 1)
+		// 	// console.log(timerAnimation)
+		// 	if(happyEmoji == 1){
+		// 		score = score+5;
+		// 		setHappyEmoji(0)
+		// 		console.log(happyEmoji, score)
+		// 	}
+		//   }
 
 
+		  //emoji3
+
+
+		//   if(((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)))
+		//  {      
+		// 	console.log(' collision')
+		// 	// setTimerAnimation( timerAnimation - 1)
+		// 	// console.log(timerAnimation)
+		// 	if(happyEmoji == 0){
+		// 		score = score+5;
+		// 		setHappyEmoji(1)
+		// 		console.log(happyEmoji, score)
+		// 	}
+		//   }
+
+		//   if(((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)))
+		//  {      
+		// 	console.log(' collision')
+		// 	// setTimerAnimation( timerAnimation - 1)
+		// 	// console.log(timerAnimation)
+		// 	if(happyEmoji == 1){
+		// 		score = score+5;
+		// 		setHappyEmoji(0)
+		// 		console.log(happyEmoji, score)
+		// 	}
+		//   }
 
 	}
+	useEffect(() => {
+		collision();
+	})
 
-	// useEffect(() => {
-	// 	startVideo();
-	// }, [])
-
-
-// useEffect(() => {
-// 	function mymove(){
-// 		var elem = document.getElementById('div2');
-// 		var pos = 0 ; 
-// 		var id = setInterval(frame,1);
-// 		function frame(){
-// 			if(pos == 350){
-// 				clearInterval(id);
-// 			}else{
-// 				pos++; 
-// 				elem.style.top = pos +'px';
-// 				elem.style.left = pos +'px';
-// 			}
-// 		}
-// 	}
-// 	mymove()
+	// collision()
 	
-// },[])
-
+	const Slider=()=>{
+		return(
+		<motion.div
+							initial={{x:500}}
+							animate= {{x:-500}}
+							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
+						>
+							<img id='div2' src={emoji1} className="emoji" />
+							<img id='div3' src={emoji2} className="emoji" />
+							<img id='div4' src={emoji3} className="emoji" />
+						</motion.div>
+		)
+	}
 
 	return (
 
@@ -163,39 +217,37 @@ function Play() {
 				</Link>
 
 				<BorderLinearProgress className="right" variant="determinate" value={progress} />
-			
+
 				<audio className="audio-element">
 					<source src={audio}></source>
 				</audio>
 
 				<div className='container'>
 
-				<Script />
+					<video
+						id='video'
+						playsInline
+						muted
+						autoPlay
+						resize
+						className="app__videoFeed"
+					/>
 					<div className='emoji_bar'>
 
-						<div id='div1' className="emoji1" />
-						<div
-						className={classes.slider}
-							// initial={{x:500}}
-							// animate= {{x:-500}}
-							// transition={{ ease: "linear", duration: '5' }}
-						>
-							<img id='div2'  src={emoji1} className="emoji" />
-							<img id='div3' src={emoji2} className="emoji" />
-							<img id='div4' src={emoji3} className="emoji" />
-							<img id='div5' src={emoji4} className="emoji" />
-						</div>
-
-						{/* <marquee  width="100%" direction="left" height="100%" scrollamount='20'>
-							<img id='div2' src={emoji1} className="emoji" />
-							<img id='div3' src={emoji2} className="emoji" />
-							<img id='div4' src={emoji3} className="emoji" />
-							<img id='div5' src={emoji4} className="emoji" />
-						</marquee> */}
+						<div id='endDiv' className="emoji1" />
+						<div id='startDiv' className="emoji2" />
+						{
+							console.log('animation timing ::: ', timerAnimation)
+						}
+						
+						<Slider/>
+						
 
 					</div>
+				<h2>Score: {score}</h2>
+				<h2>Timer: {timerAnimation}</h2>
 				</div>
-				{/* <img className="footer" src={footer} /> */}
+				<img className="footer" src={footer} />
 
 			</div>
 
