@@ -131,6 +131,18 @@
   
 }
 
+.emoji2{
+  background-color: green;
+  position: absolute;
+  width:5px;
+  height:60px;
+  margin-top: -17px;
+
+  border:3px solid #e65c00;
+right: 0
+  
+}
+
 .slider {
   position: relative;
   animation: myfirst 5s linear  infinite;
