@@ -16,8 +16,8 @@ import emoji4 from '../../assets/emoji/emoji4-01.png';
 import emoji5 from '../../assets/emoji/emoji5-01.png';
 import emoji6 from '../../assets/emoji/emoji6-01.png';
 import audio from '../../assets/sound/sad.mp3';
-import {motion} from 'framer-motion';
-
+import { motion, animate } from 'framer-motion';
+import Script from '../emojiDetection/Script';
 
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {
@@ -34,87 +34,20 @@ const BorderLinearProgress = withStyles((theme) => ({
 	},
 }))(LinearProgress);
 
-// const containerVariants = {
-// 	initial: {
-// 		x: 500
-// 	},
-// 	animate: {
-// 		x: -500,
-// 		transition: {
-// 			ease: "linear", 
-// 			duration: 5, 
-// 			repeat: Infinity
-// 		}
-// 	}
-// }
+
+const useStyles = makeStyles((theme) => ({
+	slider: {
+		position: 'relative',
+		animation: 'myfirst 5s linear  infinite',
+		width: '1000px'
+	}
+}))
 
 function Play() {
-	const [progress, setProgress] = useState(0);
+	const [progress, setProgress] = useState(0)
 	const [points, setPoints] = useState(0)
 	const [timerAnimation, setTimerAnimation] = useState(5)
-
-
-	// useEffect(() => {
-	//     const script = document.createElement("script");
-	//     script.src = '../../script';
-	//     script.async = true;
-	//     document.head.appendChild(script);
-	// }, [])
-	// console.log(Script)
-	useEffect(() => {
-		// const audioEl = document.getElementsByClassName("audio-element")[0]
-		// audioEl.play()
-
-		const timer = setInterval(() => {
-
-			
-			
-			setProgress((oldProgress) => {
-				if (oldProgress === 100) {
-					return 0;
-				}
-				const diff = Math.random() * 10;
-				return Math.min(oldProgress + diff, 100);
-			});
-		}, 500);
-
-		return () => {
-			clearInterval(timer);
-		};
-	}, []);
-
-	// const startVideo = () => {
-	// 	async function getMedia() {
-	// 		let stream = null;
-	// 		const constraints = {
-	// 			audio: true,
-	// 			video: {
-	// 				frameRate: { ideal: 15, max: 20 },
-	// 				mirrored: false,
-	// 				width: 1280,
-	// 				height: 720,
-	// 			},
-	// 			facingMode: "user"
-	// 		}
-	// 		try {
-	// 			stream = await navigator.mediaDevices.getUserMedia(constraints);
-	// 			let video = document.getElementsByClassName('app__videoFeed')[0];
-	// 			if (video) {
-	// 				video.srcObject = stream;
-	// 			}
-	// 		} catch (err) {
-	// 			console.log(err)
-	// 		}
-	// 	}
-	// 	getMedia()
-	// };
-
-	// const stopVideo = () => {
-	// 	let video = document.getElementsByClassName('app__videoFeed')[0];
-	// 	video.srcObject.getTracks().forEach((track) => track.stop());
-	// };
-
-
+	const classes = useStyles()
 
 
 	const collision = () => {
@@ -137,24 +70,6 @@ function Play() {
 		var div4Width = document.getElementById('div4').getBoundingClientRect().width
 		var div4Top = document.getElementById('div4').getBoundingClientRect().top
 		var div4Left = document.getElementById('div4').getBoundingClientRect().left
-
-		// var div5Height = document.getElementById('div5').getBoundingClientRect().height
-		// var div5Width = document.getElementById('div5').getBoundingClientRect().width
-		// var div5Top = document.getElementById('div5').getBoundingClientRect().top
-		// var div5Left = document.getElementById('div5').getBoundingClientRect().left
-
-		// var div6Height = document.getElementById('div6').getBoundingClientRect().height
-		// var div6Width = document.getElementById('div6').getBoundingClientRect().width
-		// var div6Top = document.getElementById('div6').getBoundingClientRect().top
-		// var div6Left = document.getElementById('div6').getBoundingClientRect().left
-
-		// var div7Height = document.getElementById('div7').getBoundingClientRect().height
-		// var div7Width = document.getElementById('div7').getBoundingClientRect().width
-		// var div7Top = document.getElementById('div7').getBoundingClientRect().top
-		// var div7Left = document.getElementById('div7').getBoundingClientRect().left
-
-
-
 		// if (div1Left < (div2Left + div2Width) && (div1Left + div1Width) > div2Left &&
 		// 	div1Top < (div2Top + div2Height) && (div1Top + div1Height) > div2Top) {
 		// 	console.log(' collision 1')
@@ -168,7 +83,7 @@ function Play() {
 		// if (div1Left < (div4Left + div4Width) && (div1Left + div1Width) > div4Left &&
 		// 	div1Top < (div4Top + div4Height) && (div1Top + div1Height) > div4Top) {
 		// 	console.log(' collision 3')
-			
+
 		// }
 
 
@@ -204,17 +119,7 @@ function Play() {
 		var pctop = document.getElementById('div2').getBoundingClientRect().top
 		var pcleft = document.getElementById('div2').getBoundingClientRect().left
 
-		if(((pleft < pcright) && (pright > pcleft) && (pbottom > pctop) && (ptop < pcbottom)))
-		 {      
-			console.log(' collision')
-			setTimerAnimation((prevState) => ({
-				...prevState, timerAnimation: prevState -1
-			}))
-			console.log(timerAnimation)
-		  }
-		  else{
-			console.log('no collision')
-		  }
+
 
 	}
 
@@ -222,12 +127,25 @@ function Play() {
 	// 	startVideo();
 	// }, [])
 
-	useEffect(() => {
-		collision();
-		
-	})
 
-
+// useEffect(() => {
+// 	function mymove(){
+// 		var elem = document.getElementById('div2');
+// 		var pos = 0 ; 
+// 		var id = setInterval(frame,1);
+// 		function frame(){
+// 			if(pos == 350){
+// 				clearInterval(id);
+// 			}else{
+// 				pos++; 
+// 				elem.style.top = pos +'px';
+// 				elem.style.left = pos +'px';
+// 			}
+// 		}
+// 	}
+// 	mymove()
+	
+// },[])
 
 
 	return (
@@ -245,50 +163,39 @@ function Play() {
 				</Link>
 
 				<BorderLinearProgress className="right" variant="determinate" value={progress} />
-
+			
 				<audio className="audio-element">
 					<source src={audio}></source>
 				</audio>
 
 				<div className='container'>
 
-					<video
-						id='video'
-						playsInline
-						muted
-						autoPlay
-						resize
-						className="app__videoFeed"
-					/>
+				<Script />
 					<div className='emoji_bar'>
 
 						<div id='div1' className="emoji1" />
-						<motion.div
-							// variants={containerVariants}
-							initial={{x:500}}
-							animate= {{x:-500}}
-							transition={{ ease: "linear", duration: `${timerAnimation}`, repeat: Infinity }}
+						<div
+						className={classes.slider}
+							// initial={{x:500}}
+							// animate= {{x:-500}}
+							// transition={{ ease: "linear", duration: '5' }}
 						>
+							<img id='div2'  src={emoji1} className="emoji" />
+							<img id='div3' src={emoji2} className="emoji" />
+							<img id='div4' src={emoji3} className="emoji" />
+							<img id='div5' src={emoji4} className="emoji" />
+						</div>
+
+						{/* <marquee  width="100%" direction="left" height="100%" scrollamount='20'>
 							<img id='div2' src={emoji1} className="emoji" />
 							<img id='div3' src={emoji2} className="emoji" />
 							<img id='div4' src={emoji3} className="emoji" />
 							<img id='div5' src={emoji4} className="emoji" />
-							{/* <img id='div6' src={emoji5} className="emoji" />
-							<img id='div7' src={emoji6} className="emoji" />
-							<img id='div8' src={emoji1} className="emoji" />
-							<img id='div9' src={emoji2} className="emoji" />
-							<img id='div10' src={emoji3} className="emoji" />
-							<img id='div11' src={emoji4} className="emoji" />
-							<img id='div12' src={emoji5} className="emoji" />
-							<img id='div13' src={emoji6} className="emoji" />
-							<img id='div14' src={emoji6} className="emoji" /> */}
-						</motion.div>
-						
-
+						</marquee> */}
 
 					</div>
 				</div>
-				<img className="footer" src={footer} />
+				{/* <img className="footer" src={footer} /> */}
 
 			</div>
 
