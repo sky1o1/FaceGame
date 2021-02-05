@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useSelector} from 'react-redux';
 import footer from '../../assets/gif/gif.gif';
 import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
@@ -13,6 +14,8 @@ import emoji5 from '../../assets/emoji/emoji5-01.png';
 import emoji6 from '../../assets/emoji/emoji6-01.png';
 import audio from '../../assets/sound/sad.mp3';
 import {motion} from 'framer-motion';
+import Script from '../emojiDetection/Script';
+import { setHighScore } from '../../store/profile';
 
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -31,6 +34,8 @@ const BorderLinearProgress = withStyles((theme) => ({
 }))(LinearProgress);
 
 function Play() {
+	const emoji = useSelector(state => state.emoji)
+	const profile = useSelector(state => state.profile)
 	const [progress, setProgress] = useState(0);
 	const [points, setPoints] = useState({
 		initialPoints: 0,
@@ -39,7 +44,6 @@ function Play() {
 	const [timerAnimation, setTimerAnimation] = useState(5)
 	const [happyEmoji, setHappyEmoji] = useState(0)
 	const [score, setScore] = useState(0)
-
 
 	useEffect(() => {
 		// const audioEl = document.getElementsByClassName("audio-element")[0]
@@ -60,7 +64,12 @@ function Play() {
 		};
 	}, []);
 
-	
+	const gameOver = () => {
+		console.log('GAME OVER')
+		if(score > profile.highScore){
+			dispatchEvent(setHighScore(score))
+		}
+	}
 
 
 
@@ -93,10 +102,10 @@ function Play() {
 
 
 // emoji1
-		if(((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)))
+		if(((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) && emoji.happyFace)
 		 {      
 			console.log(' end collision')
-			if(happyEmoji == 0){
+			if(happyEmoji == 0 ){
 				setScore(score+5)
 				console.log('ssssss', score)
 				setPoints(prevState => ({
@@ -113,6 +122,8 @@ function Play() {
 					setTimerAnimation(timerAnimation - 3)
 				}
 			}
+		  }else{
+			   gameOver();
 		  }
 
 		  if(((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom)))
@@ -188,20 +199,6 @@ function Play() {
 
 	// collision()
 	
-	const Slider=()=>{
-		return(
-		<motion.div
-							initial={{x:500}}
-							animate= {{x:-500}}
-							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
-						>
-							<img id='div2' src={emoji1} className="emoji" />
-							<img id='div3' src={emoji2} className="emoji" />
-							<img id='div4' src={emoji3} className="emoji" />
-						</motion.div>
-		)
-	}
-
 	return (
 
 		<div className="App HomeBody">
@@ -223,24 +220,21 @@ function Play() {
 				</audio>
 
 				<div className='container'>
-
-					<video
-						id='video'
-						playsInline
-						muted
-						autoPlay
-						resize
-						className="app__videoFeed"
-					/>
+		
+				<Script />
 					<div className='emoji_bar'>
 
 						<div id='endDiv' className="emoji1" />
 						<div id='startDiv' className="emoji2" />
-						{
-							console.log('animation timing ::: ', timerAnimation)
-						}
-						
-						<Slider/>
+						<motion.div
+							initial={{x:500}}
+							animate= {{x:-500}}
+							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
+						>
+							<img id='div2' src={emoji1} className="emoji" />
+							<img id='div3' src={emoji2} className="emoji" />
+							<img id='div4' src={emoji3} className="emoji" />
+						</motion.div>
 						
 
 					</div>

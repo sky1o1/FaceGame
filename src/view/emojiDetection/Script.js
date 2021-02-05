@@ -1,8 +1,10 @@
 import React from 'react';
 import * as faceapi from "face-api.js"
+import {useDispatch} from 'react-redux';
+import {setHappyFace, setSadFace, setAngryFace, setSurprisedFace} from '../../store/emoji';
 
 function Script() {
-
+	const dispatch = useDispatch()
 	const video1 = document.getElementById('video1')
 	async function face() {
 
@@ -56,12 +58,16 @@ function Script() {
 					const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
 					if (detections[0].expressions.happy >= 0.5) {
 						console.log('happy face')
+						dispatch(setHappyFace(true))
 					} else if (detections[0].expressions.angry >= 0.5) {
 						console.log('angry face')
+						dispatch(setAngryFace(true))
 					} else if (detections[0].expressions.surprised >= 0.5) {
 						console.log('surprise face')
+						dispatch(setSurprisedFace(true))
 					} else if (detections[0].expressions.sad >= 0.5) {
 						console.log('sad face')
+						dispatch(setSadFace(true))
 					} 
 				} catch (err) {
 					console.log(err)

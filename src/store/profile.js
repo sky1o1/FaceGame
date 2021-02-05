@@ -3,14 +3,12 @@ import { createAction, handleActions } from 'redux-actions';
 export const setProfile = createAction('SET_PROFILE');
 export const setUsername = createAction('SET_USERNAME');
 export const setEmail = createAction('SET_EMAIL');
-export const setPassword = createAction('SET_PASSWORD');
-export const setImage = createAction('SET_IMAGE');
+export const setHighScore = createAction('SET_HIGH_SCORE');
 
 const INITIAL_STATE = { 
     username: '',
     email: '',
-    password: '',
-    image: '',
+    highScore: 0,
 }; 
 
 const profileReducer = handleActions(
@@ -29,16 +27,10 @@ const profileReducer = handleActions(
         ...state,
         email : action.payload
     }),
-    'SET_PASSWORD':
-    (state, action) => {
-        console.log('action,', action.payload)
-        return {...state, 
-        password: action.payload}
-    } ,
-    'SET_IMAGE':
+    'SET_HIGH_SCORE':
     (state, action) => ({
         ...state,
-        image : action.payload
+        highScore : action.payload
     })
 },
     INITIAL_STATE
