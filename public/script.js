@@ -44,14 +44,20 @@
 //     // console.log(detections[0].expressions)
 //     if(detections[0].expressions.happy>=0.5){
 //       console.log('happy face')
+//       console.log('happy face')
+//     //   createEmotion('happy face')
 //     }else if(detections[0].expressions.angry>=0.5){
 //       console.log('angry face')
+//     //   createEmotion('angry face')
 //     }else if(detections[0].expressions.surprised>=0.5){
 //       console.log('surprise face')
+//     //   createEmotion('surprise face')
 //     }else if(detections[0].expressions.sad>=0.5){
 //       console.log('sad face')
+//     //   createEmotion('sad face')
 //     }else{
 //       console.log('No face detected')
+//     //   createEmotion('No face detected')
 //     }
 
 //     // const resizedDetections = faceapi.resizeResults(detections, displaySize)

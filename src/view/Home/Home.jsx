@@ -30,7 +30,6 @@ function Home() {
 
     const logout = () => {
         firebase.auth().signOut().then(function () {
-            console.log('logged out')
             history.push('/')
         
           }).catch(function (error) {
