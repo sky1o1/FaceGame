@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import footer from '../../assets/gif/gif.gif';
 import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
@@ -37,6 +38,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 
 function Play() {
 	const dispatch = useDispatch()
+	const history = useHistory()
 	const emoji = useSelector(state => state.emoji)
 	const profile = useSelector(state => state.profile)
 	const [progress, setProgress] = useState(0);
@@ -76,8 +78,13 @@ function Play() {
 
 	const gameOver = () => {
 		console.log('GAME OVER')
-		if (score > profile.highScore) {
-			dispatch(setHighScore(score))
+		// if (score > profile.highScore) {
+		// 	dispatch(setHighScore(score))
+		// }
+
+		dispatch(setHighScore(score))
+		if(score >= 10){
+			history.push('/gameover')
 		}
 	}
 
@@ -158,25 +165,25 @@ function Play() {
 							const detections =    await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
 
 							console.log(emoji.happyFace)
-							if (detections[0].expressions.happy >= 0.8) {
+							if (detections[0].expressions.happy >= 0.6) {
 								console.log('happy face')
 								dispatch(setHappyFace(true))
 								dispatch(setAngryFace(false))
 								dispatch(setSadFace(false))
 								dispatch(setSurprisedFace(false))
-							} else if (detections[0].expressions.angry >= 0.8) {
+							} else if (detections[0].expressions.angry >= 0.6) {
 								console.log('angry face')
 								dispatch(setAngryFace(true))
 								dispatch(setSadFace(false))
 								dispatch(setSurprisedFace(false))
 								dispatch(setHappyFace(false))
-							} else if (detections[0].expressions.surprised >= 0.8) {
+							} else if (detections[0].expressions.surprised >= 0.6) {
 								console.log('surprise face')
 								dispatch(setSurprisedFace(true))
 								dispatch(setHappyFace(false))
 								dispatch(setAngryFace(false))
 								dispatch(setSadFace(false))
-							} else if (detections[0].expressions.sad >= 0.8) {
+							} else if (detections[0].expressions.sad >= 0.6) {
 								console.log('sad face')
 								dispatch(setSadFace(true))
 								dispatch(setSurprisedFace(false))
@@ -209,14 +216,14 @@ function Play() {
 
 	}
 
-	function setFalse()
-	{
-		console.log("points increased")
-		dispatch(setSurprisedFace(false))
-		dispatch(setHappyFace(false))
-		dispatch(setAngryFace(false))
-		dispatch(setSadFace(false))
-	}
+	// function setFalse()
+	// {
+	// 	console.log("points increased")
+	// 	dispatch(setSurprisedFace(false))
+	// 	dispatch(setHappyFace(false))
+	// 	dispatch(setAngryFace(false))
+	// 	dispatch(setSadFace(false))
+	// }
 		
 
 
@@ -242,14 +249,18 @@ function Play() {
 		var e2top = document.getElementById('div3').getBoundingClientRect().top
 		var e2left = document.getElementById('div3').getBoundingClientRect().left
 
-		// var e3bottom = document.getElementById('div4').getBoundingClientRect().bottom
-		// var e3right = document.getElementById('div4').getBoundingClientRect().right
-		// var e3top = document.getElementById('div4').getBoundingClientRect().top
-		// var e3left = document.getElementById('div4').getBoundingClientRect().left
+		var e3bottom = document.getElementById('div4').getBoundingClientRect().bottom
+		var e3right = document.getElementById('div4').getBoundingClientRect().right
+		var e3top = document.getElementById('div4').getBoundingClientRect().top
+		var e3left = document.getElementById('div4').getBoundingClientRect().left
 
 
 		// emoji1
 		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
+			dispatch(setSurprisedFace(false))
+						dispatch(setHappyFace(false))
+						dispatch(setAngryFace(false))
+						dispatch(setSadFace(false))
 			
 			faceFxn()
 			if(emoji.happyFace){
@@ -261,35 +272,36 @@ function Play() {
 				{
 					console.log('entered')
 					setScore(score + 5)
+						
 					console.log('ssssss', score)
-					setPoints(prevState => ({
-						...prevState, finalPoints: score
-					}))
+					// setPoints(prevState => ({
+					// 	...prevState, finalPoints: score
+					// }))
 					setEmojis(prevState => ({
 						...prevState, happyEmoji: 1
 					}))
 	
-					if ((points.finalPoints - points.initialPoints) == 10) {
-						console.log(points.finalPoints, points.initialPoints)
-						setPoints(prevState => ({
-							...prevState, initialPoints: score
-						}))
-						setTimerAnimation(timerAnimation - 3)
-					}
+					// if ((points.finalPoints - points.initialPoints) == 10) {
+					// 	console.log(points.finalPoints, points.initialPoints)
+					// 	setPoints(prevState => ({
+					// 		...prevState, initialPoints: score
+					// 	})).then()
+					// 	setTimerAnimation(timerAnimation - 3)
+					// }
 
-					setFalse()
+					
 
 
 				}
 
-
-
+			}else{
+				gameOver()
 			}
 
 		
 		}
 
-		if (((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom))) {
+		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom))) {
 			console.log(' start collision')
 			// setTimerAnimation( timerAnimation - 1)
 			// console.log(timerAnimation)
@@ -303,73 +315,93 @@ function Play() {
 
 		// emoji2
 
-
-		  if(((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)))
-		 {      
+		if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)) ) {
+			dispatch(setSurprisedFace(false))
+						dispatch(setHappyFace(false))
+						dispatch(setAngryFace(false))
+						dispatch(setSadFace(false))
+			
 			faceFxn()
 			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) {
+				console.log('entered')
+				console.log('score', score)
+
+
+				if (emojis.surprisedEmoji == 0) 
+				{
 					console.log('entered')
-					setScore(score + 5)
+					setScore(score + 10)
+						
 					console.log('ssssss', score)
-					setPoints(prevState => ({
-						...prevState, finalPoints: score
-					}))
 					setEmojis(prevState => ({
 						...prevState, surprisedEmoji: 1
 					}))
-	
-					if ((points.finalPoints - points.initialPoints) == 10) {
-						console.log(points.finalPoints, points.initialPoints)
-						setPoints(prevState => ({
-							...prevState, initialPoints: score
-						}))
-						setTimerAnimation(timerAnimation - 3)
-					}
+
+					
+
+
 				}
+
 			}else{
 				gameOver()
 			}
-		  }
 
-		  if(((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom)))
-		 {      
+		
+		}
+
+		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom))) {
 			console.log(' start collision')
 			if (emojis.surprisedEmoji == 1) {
 				setEmojis(prevState => ({
 					...prevState, surprisedEmoji: 0
 				}))
 			}
-		  }
+		}
 
 
-		//emoji3
+
+		// emoji3
+
+		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
+			dispatch(setSurprisedFace(false))
+						dispatch(setHappyFace(false))
+						dispatch(setAngryFace(false))
+						dispatch(setSadFace(false))
+			
+			faceFxn()
+			if(emoji.angryFace){
+				console.log('entered')
+				console.log('score', score)
 
 
-		//   if(((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)))
-		//  {      
-		// 	console.log(' collision')
-		// 	// setTimerAnimation( timerAnimation - 1)
-		// 	// console.log(timerAnimation)
-		// 	if(happyEmoji == 0){
-		// 		score = score+5;
-		// 		setHappyEmoji(1)
-		// 		console.log(happyEmoji, score)
-		// 	}
-		//   }
+				if (emojis.angryEmoji == 0) 
+				{
+					console.log('entered')
+					setScore(score + 15)
+						
+					console.log('ssssss', score)
+					setEmojis(prevState => ({
+						...prevState, angryEmoji: 1
+					}))
 
-		//   if(((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)))
-		//  {      
-		// 	console.log(' collision')
-		// 	// setTimerAnimation( timerAnimation - 1)
-		// 	// console.log(timerAnimation)
-		// 	if(happyEmoji == 1){
-		// 		score = score+5;
-		// 		setHappyEmoji(0)
-		// 		console.log(happyEmoji, score)
-		// 	}
-		//   }
+					
+				}
 
+			}else{
+				gameOver()
+			}
+
+		
+		}
+
+		if (((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom))) {
+			console.log(' start collision')
+			if (emojis.angryEmoji == 1) {
+				setEmojis(prevState => ({
+					...prevState, angryEmoji: 0
+				}))
+			}
+		}
 	}
 
 	useEffect(() => {
@@ -414,9 +446,9 @@ function Play() {
 							animate={{ x: -500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
 						>
-							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:45}} />
-							<img id='div3' src={emoji2} className="emoji"/>
-							{/* <img id='div4' src={emoji3} className="emoji" /> */}
+							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:30}} />
+							<img id='div3' src={emoji2} className="emoji"  style={{marginRight:30}}/>
+							<img id='div4' src={emoji3} className="emoji" style={{marginRight:30}} />
 						</motion.div>
 
 
