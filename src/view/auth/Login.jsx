@@ -1,4 +1,6 @@
 import React, {  useEffect } from 'react';
+import {useSelector} from 'react-redux';
+import { useHistory } from "react-router-dom";
 import firebase from 'firebase';
 import {auth} from '../../services/firebase/config';
 import * as firebaseui from 'firebaseui';
@@ -17,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const history = useHistory()
+  const authUser = useSelector(state => state.authenticate)
 
 
   var uiConfig = {
@@ -25,6 +29,12 @@ const Login = () => {
   };
 
   useEffect(() => {
+
+  if (authUser.isAuthenticated) {
+    history.push("/home");
+    return null;
+  }
+
     if (firebaseui.auth.AuthUI.getInstance()) {
       const ui = firebaseui.auth.AuthUI.getInstance()
       ui.start('#firebaseui-auth-container', uiConfig)
