@@ -53,6 +53,8 @@ function Play() {
 	})
 	const [score, setScore] = useState(0)
 
+	const video1 = document.getElementById('video1')
+
 	useEffect(() => {
 		// const audioEl = document.getElementsByClassName("audio-element")[0]
 		// audioEl.play()
@@ -75,22 +77,25 @@ function Play() {
 	const gameOver = () => {
 		console.log('GAME OVER')
 		if (score > profile.highScore) {
-			dispatchEvent(setHighScore(score))
+			dispatch(setHighScore(score))
 		}
 	}
 
-	const video1 = document.getElementById('video1')
-	async function face() {
-
-		await Promise.all([
-			faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-			faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-			faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-			faceapi.nets.faceExpressionNet.loadFromUri('/models')
-		]).then(startVideo).catch(error => {
-			console.error(error)
-		})
-	}
+	useEffect(() => {
+		async function loadModels() {
+			await Promise.all([
+				faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+				faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
+				faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+				faceapi.nets.faceExpressionNet.loadFromUri('/models')
+				
+			]).then(console.log("testttststssgfinfn")).catch(error => {
+				console.error(error)
+			})
+		}
+		loadModels()
+	}, [])
+	
 
 	function startVideo() {
 		async function getMedia() {
@@ -118,56 +123,102 @@ function Play() {
 		getMedia()
 	};
 
-	const faceFxn = () => {
-		console.log('entered in face fxn')
-		if (video1) {
-			video1.addEventListener('play', () => {
+	useEffect(() => {
+		startVideo()
+	},[])
+	
+	function faceFxn(){
+
+	
+
+		console.log('Up ',emojis.happyEmoji );
+
+		if(emojis.happyEmoji == 0)
+		{
+			console.log('entered in face fxn')
+			console.log('Down ',emojis.happyEmoji );
+
+
+			if (video1) {
+			// video1.addEventListener('play', () => {				
+
 				const canvas = faceapi.createCanvasFromMedia(video1)
 				document.body.append(canvas)
 				const displaySize = { width: video1.width, height: video1.height }
 				faceapi.matchDimensions(canvas, displaySize)
-				setInterval(async () => {
-					try {
-						const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-						if (detections[0].expressions.happy >= 0.5) {
-							console.log('happy face')
-							dispatch(setHappyFace(true))
-							dispatch(setAngryFace(false))
-							dispatch(setSadFace(false))
-							dispatch(setSurprisedFace(false))
-						} else if (detections[0].expressions.angry >= 0.5) {
-							console.log('angry face')
-							dispatch(setAngryFace(true))
-							dispatch(setSadFace(false))
-							dispatch(setSurprisedFace(false))
-							dispatch(setHappyFace(false))
-						} else if (detections[0].expressions.surprised >= 0.5) {
-							console.log('surprise face')
-							dispatch(setSurprisedFace(true))
-							dispatch(setHappyFace(false))
-							dispatch(setAngryFace(false))
-							dispatch(setSadFace(false))
-						} else if (detections[0].expressions.sad >= 0.5) {
-							console.log('sad face')
-							dispatch(setSadFace(true))
-							dispatch(setSurprisedFace(false))
-							dispatch(setHappyFace(false))
-							dispatch(setAngryFace(false))
+			
+				// 	console.log('interval')
+
+
+
+				const ss = async () => {
+
+				
+						try {
+							const detections =    await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+
+							console.log(emoji.happyFace)
+							if (detections[0].expressions.happy >= 0.8) {
+								console.log('happy face')
+								dispatch(setHappyFace(true))
+								dispatch(setAngryFace(false))
+								dispatch(setSadFace(false))
+								dispatch(setSurprisedFace(false))
+							} else if (detections[0].expressions.angry >= 0.8) {
+								console.log('angry face')
+								dispatch(setAngryFace(true))
+								dispatch(setSadFace(false))
+								dispatch(setSurprisedFace(false))
+								dispatch(setHappyFace(false))
+							} else if (detections[0].expressions.surprised >= 0.8) {
+								console.log('surprise face')
+								dispatch(setSurprisedFace(true))
+								dispatch(setHappyFace(false))
+								dispatch(setAngryFace(false))
+								dispatch(setSadFace(false))
+							} else if (detections[0].expressions.sad >= 0.8) {
+								console.log('sad face')
+								dispatch(setSadFace(true))
+								dispatch(setSurprisedFace(false))
+								dispatch(setHappyFace(false))
+								dispatch(setAngryFace(false))
+							}
+						} catch (err) {
+							gameOver()
+
 						}
-					} catch (err) {
-						console.log(err)
+						canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+
+						// return await ('')
+					
 					}
-					canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-				}, 100)
-			})
+
+					
+					ss()
+
+
 		}
 		else {
 			console.log('error loading vdo')
 		}
+
+		}
+
+		
+
+
 	}
 
+	function setFalse()
+	{
+		console.log("points increased")
+		dispatch(setSurprisedFace(false))
+		dispatch(setHappyFace(false))
+		dispatch(setAngryFace(false))
+		dispatch(setSadFace(false))
+	}
+		
 
-	face()
 
 	const collision = () => {
 		var sbottom = document.getElementById('startDiv').getBoundingClientRect().bottom
@@ -199,10 +250,15 @@ function Play() {
 
 		// emoji1
 		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
-			console.log('entered')
+			
 			faceFxn()
-			if(emoji.happyEmoji){
-				if (emojis.happyEmoji == 0) {
+			if(emoji.happyFace){
+				console.log('entered')
+				console.log('score', score)
+
+
+				if (emojis.happyEmoji == 0) 
+				{
 					console.log('entered')
 					setScore(score + 5)
 					console.log('ssssss', score)
@@ -220,9 +276,14 @@ function Play() {
 						}))
 						setTimerAnimation(timerAnimation - 3)
 					}
+
+					setFalse()
+
+
 				}
-			}else{
-				gameOver()
+
+
+
 			}
 
 		
@@ -245,9 +306,8 @@ function Play() {
 
 		  if(((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)))
 		 {      
-			console.log('entered')
 			faceFxn()
-			if(emoji.surprisedEmoji){
+			if(emoji.surprisedFace){
 				if (emojis.surprisedEmoji == 0) {
 					console.log('entered')
 					setScore(score + 5)
@@ -316,7 +376,6 @@ function Play() {
 		collision();
 	})
 
-console.log('score',score)
 	return (
 
 		<div className="App HomeBody">
@@ -331,8 +390,8 @@ console.log('score',score)
 					</IconButton>
 				</Link>
 
-				<BorderLinearProgress className="right" variant="determinate" value={progress} />
-
+				{/* <BorderLinearProgress className="right" variant="determinate" value={progress} /> */}
+				<h2>Score: {score}</h2>
 				<audio className="audio-element">
 					<source src={audio}></source>
 				</audio>
@@ -355,15 +414,15 @@ console.log('score',score)
 							animate={{ x: -500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
 						>
-							<img id='div2' src={emoji1} className="emoji" />
-							<img id='div3' src={emoji2} className="emoji" />
+							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:45}} />
+							<img id='div3' src={emoji2} className="emoji"/>
 							{/* <img id='div4' src={emoji3} className="emoji" /> */}
 						</motion.div>
 
 
 					</div>
 					<h2>Score: {score}</h2>
-					<h2>Timer: {timerAnimation}</h2>
+					{/* <h2>Timer: {timerAnimation}</h2> */}
 				</div>
 				<img className="footer" src={footer} />
 

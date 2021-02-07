@@ -50,24 +50,24 @@ function Script() {
 	if (video1) {
 		video1.addEventListener('play', () => {
 			const canvas = faceapi.createCanvasFromMedia(video1)
-			document.body.append(canvas)
+			// document.body.append(canvas)
 			const displaySize = { width: video1.width, height: video1.height }
 			faceapi.matchDimensions(canvas, displaySize)
 			setInterval(async () => {
 				try {
-					const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+					const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceExpressions()
 					if (detections[0].expressions.happy >= 0.5) {
 						console.log('happy face')
-						dispatch(setHappyFace(true))
+						// dispatch(setHappyFace(true))
 					} else if (detections[0].expressions.angry >= 0.5) {
 						console.log('angry face')
-						dispatch(setAngryFace(true))
+						// dispatch(setAngryFace(true))
 					} else if (detections[0].expressions.surprised >= 0.5) {
 						console.log('surprise face')
-						dispatch(setSurprisedFace(true))
+						// dispatch(setSurprisedFace(true))
 					} else if (detections[0].expressions.sad >= 0.5) {
 						console.log('sad face')
-						dispatch(setSadFace(true))
+						// dispatch(setSadFace(true))
 					} 
 				} catch (err) {
 					console.log(err)
@@ -75,7 +75,7 @@ function Script() {
 
 
 
-				canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+				// canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
 			}, 100)
 		})
 	}
