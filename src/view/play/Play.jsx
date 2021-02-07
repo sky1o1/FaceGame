@@ -10,13 +10,12 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import emoji1 from '../../assets/emoji/emoji1-01.png';
 import emoji2 from '../../assets/emoji/emoji2-01.png';
 import emoji3 from '../../assets/emoji/emoji3-01.png';
-import emoji4 from '../../assets/emoji/emoji4-01.png';
-import emoji5 from '../../assets/emoji/emoji5-01.png';
-import emoji6 from '../../assets/emoji/emoji6-01.png';
+import angry from '../../assets/emoji/angry.png';
+import surprise from '../../assets/emoji/surprise.png';
 import audio from '../../assets/sound/sad.mp3';
 import { motion } from 'framer-motion';
 import Script from '../emojiDetection/Script';
-import { setHighScore, setScore } from '../../store/profile';
+import { setHighScore, setScores } from '../../store/profile';
 import * as faceapi from "face-api.js"
 import { setHappyFace, setSadFace, setAngryFace, setSurprisedFace } from '../../store/emoji';
 
@@ -82,8 +81,8 @@ function Play() {
 			dispatch(setHighScore(score))
 		}
 
-		dispatch(setScore(score))
-		if(score >= 10){
+		dispatch(setScores(score))
+		if(score >= 50){
 			history.push('/gameover')
 		}
 	}
@@ -136,9 +135,7 @@ function Play() {
 	
 	function faceFxn(){
 
-	
-
-		console.log('Up ',emojis.happyEmoji );
+	console.log('Up ',emojis.happyEmoji );
 
 		if(emojis.happyEmoji == 0)
 		{
@@ -257,7 +254,7 @@ function Play() {
 
 		// emoji1
 		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
-			dispatch(setSurprisedFace(false))
+						dispatch(setSurprisedFace(false))
 						dispatch(setHappyFace(false))
 						dispatch(setAngryFace(false))
 						dispatch(setSadFace(false))
@@ -288,26 +285,26 @@ function Play() {
 					// 	})).then()
 					// 	setTimerAnimation(timerAnimation - 3)
 					// }
-
-					
-
-
 				}
 
 			}else{
 				gameOver()
 			}
-
-		
 		}
 
-		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom))) {
+		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom) &&
+			(sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom) &&
+			(sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)
+		  )) {
 			console.log(' start collision')
 			// setTimerAnimation( timerAnimation - 1)
 			// console.log(timerAnimation)
 			if (emojis.happyEmoji == 1) {
 				setEmojis(prevState => ({
-					...prevState, happyEmoji: 0
+					...prevState,
+					 happyEmoji: 0,
+					surprisedEmoji: 0,
+					angryEmoji: 0
 				}))
 			}
 		}
@@ -336,34 +333,18 @@ function Play() {
 					setEmojis(prevState => ({
 						...prevState, surprisedEmoji: 1
 					}))
-
-					
-
-
 				}
 
 			}else{
 				gameOver()
-			}
-
-		
+			}	
 		}
-
-		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom))) {
-			console.log(' start collision')
-			if (emojis.surprisedEmoji == 1) {
-				setEmojis(prevState => ({
-					...prevState, surprisedEmoji: 0
-				}))
-			}
-		}
-
 
 
 		// emoji3
 
 		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
-			dispatch(setSurprisedFace(false))
+						dispatch(setSurprisedFace(false))
 						dispatch(setHappyFace(false))
 						dispatch(setAngryFace(false))
 						dispatch(setSadFace(false))
@@ -383,24 +364,12 @@ function Play() {
 					setEmojis(prevState => ({
 						...prevState, angryEmoji: 1
 					}))
-
-					
 				}
 
 			}else{
 				gameOver()
 			}
 
-		
-		}
-
-		if (((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom))) {
-			console.log(' start collision')
-			if (emojis.angryEmoji == 1) {
-				setEmojis(prevState => ({
-					...prevState, angryEmoji: 0
-				}))
-			}
 		}
 	}
 
@@ -446,9 +415,9 @@ function Play() {
 							animate={{ x: -500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
 						>
-							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:30}} />
-							<img id='div3' src={emoji2} className="emoji"  style={{marginRight:30}}/>
-							<img id='div4' src={emoji3} className="emoji" style={{marginRight:30}} />
+							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:40}} />
+							<img id='div3' src={surprise} className="emoji"  style={{marginRight:40}}/>
+							<img id='div4' src={angry} className="emoji" style={{marginRight:40}} />
 						</motion.div>
 
 

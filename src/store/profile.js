@@ -4,7 +4,7 @@ export const setProfile = createAction('SET_PROFILE');
 export const setUsername = createAction('SET_USERNAME');
 export const setEmail = createAction('SET_EMAIL');
 export const setHighScore = createAction('SET_HIGH_SCORE');
-export const setScore = createAction('SET_SCORE');
+export const setScores = createAction('SET_SCORE');
 
 const INITIAL_STATE = { 
     username: '',
