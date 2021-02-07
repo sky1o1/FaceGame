@@ -11,6 +11,7 @@ import Script from '../src/view/emojiDetection/Script';
 import Profile from '../src/view/profile/Profile';
 import Login from '../src/view/auth/Login';
 import Play from './view/play/Play';
+import GameOver from './view/play/GameOver';
 
 function App() {
 const dispatch = useDispatch()
@@ -41,6 +42,7 @@ const dispatch = useDispatch()
       <PrivateRoute path="/play" component={Play} />
       <PrivateRoute path="/profile" component={Profile} />
       <PrivateRoute path="/script" component={Script} />
+      <PrivateRoute path="/gameover" component={GameOver} />
     </Switch>
   </Router>
   );
