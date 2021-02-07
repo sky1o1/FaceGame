@@ -4,11 +4,13 @@ export const setProfile = createAction('SET_PROFILE');
 export const setUsername = createAction('SET_USERNAME');
 export const setEmail = createAction('SET_EMAIL');
 export const setHighScore = createAction('SET_HIGH_SCORE');
+export const setScore = createAction('SET_SCORE');
 
 const INITIAL_STATE = { 
     username: '',
     email: '',
     highScore: 0,
+    score: 0,
 }; 
 
 const profileReducer = handleActions(
@@ -31,6 +33,11 @@ const profileReducer = handleActions(
     (state, action) => ({
         ...state,
         highScore : action.payload
+    }),
+    'SET_SCORE':
+    (state, action) => ({
+        ...state,
+        score : action.payload
     })
 },
     INITIAL_STATE

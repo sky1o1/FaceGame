@@ -16,7 +16,7 @@ import emoji6 from '../../assets/emoji/emoji6-01.png';
 import audio from '../../assets/sound/sad.mp3';
 import { motion } from 'framer-motion';
 import Script from '../emojiDetection/Script';
-import { setHighScore } from '../../store/profile';
+import { setHighScore, setScore } from '../../store/profile';
 import * as faceapi from "face-api.js"
 import { setHappyFace, setSadFace, setAngryFace, setSurprisedFace } from '../../store/emoji';
 
@@ -78,11 +78,11 @@ function Play() {
 
 	const gameOver = () => {
 		console.log('GAME OVER')
-		// if (score > profile.highScore) {
-		// 	dispatch(setHighScore(score))
-		// }
+		if (score > profile.highScore) {
+			dispatch(setHighScore(score))
+		}
 
-		dispatch(setHighScore(score))
+		dispatch(setScore(score))
 		if(score >= 10){
 			history.push('/gameover')
 		}
