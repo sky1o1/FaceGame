@@ -36,6 +36,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 }))(LinearProgress);
 
 function Play() {
+
 	const dispatch = useDispatch()
 	const history = useHistory()
 	const emoji = useSelector(state => state.emoji)
@@ -57,8 +58,8 @@ function Play() {
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
-		// const audioEl = document.getElementsByClassName("audio-element")[0]
-		// audioEl.play()
+		const audioEl = document.getElementsByClassName("audio-element")[0]
+		audioEl.play()
 
 		const timer = setInterval(() => {
 			setProgress((oldProgress) => {
@@ -76,13 +77,13 @@ function Play() {
 	}, []);
 
 	const gameOver = () => {
-		console.log('GAME OVER')
 		if (score > profile.highScore) {
 			dispatch(setHighScore(score))
 		}
 
-		dispatch(setScores(score))
-		if(score >= 50){
+		if(score >= 20){
+			dispatch(setScores(score))
+			stopVideo()
 			history.push('/gameover')
 		}
 	}
@@ -94,8 +95,7 @@ function Play() {
 				faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
 				faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
 				faceapi.nets.faceExpressionNet.loadFromUri('/models')
-				
-			]).then(console.log("testttststssgfinfn")).catch(error => {
+				]).catch(error => {
 				console.error(error)
 			})
 		}
@@ -132,17 +132,15 @@ function Play() {
 	useEffect(() => {
 		startVideo()
 	},[])
+
+	const stopVideo = () => {
+		let video = document.getElementsByClassName('app__videoFeed')[0];
+		video.srcObject.getTracks().forEach((track) => track.stop());
+	};
 	
 	function faceFxn(){
-
-	console.log('Up ',emojis.happyEmoji );
-
 		if(emojis.happyEmoji == 0)
 		{
-			console.log('entered in face fxn')
-			console.log('Down ',emojis.happyEmoji );
-
-
 			if (video1) {
 			// video1.addEventListener('play', () => {				
 
@@ -150,18 +148,11 @@ function Play() {
 				document.body.append(canvas)
 				const displaySize = { width: video1.width, height: video1.height }
 				faceapi.matchDimensions(canvas, displaySize)
-			
-				// 	console.log('interval')
-
-
-
-				const ss = async () => {
-
-				
+					
+				const faceApi = async () => {
 						try {
-							const detections =    await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+								const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
 
-							console.log(emoji.happyFace)
 							if (detections[0].expressions.happy >= 0.6) {
 								console.log('happy face')
 								dispatch(setHappyFace(true))
@@ -187,30 +178,19 @@ function Play() {
 								dispatch(setHappyFace(false))
 								dispatch(setAngryFace(false))
 							}
+							
 						} catch (err) {
-							gameOver()
-
+							console.log(err)
 						}
 						canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-
-						// return await ('')
-					
 					}
-
-					
-					ss()
-
-
+					faceApi()
 		}
 		else {
 			console.log('error loading vdo')
 		}
 
 		}
-
-		
-
-
 	}
 
 	// function setFalse()
@@ -241,36 +221,29 @@ function Play() {
 		var e1left = document.getElementById('div2').getBoundingClientRect().left
 
 
-		var e2bottom = document.getElementById('div3').getBoundingClientRect().bottom
-		var e2right = document.getElementById('div3').getBoundingClientRect().right
-		var e2top = document.getElementById('div3').getBoundingClientRect().top
-		var e2left = document.getElementById('div3').getBoundingClientRect().left
+		// var e2bottom = document.getElementById('div3').getBoundingClientRect().bottom
+		// var e2right = document.getElementById('div3').getBoundingClientRect().right
+		// var e2top = document.getElementById('div3').getBoundingClientRect().top
+		// var e2left = document.getElementById('div3').getBoundingClientRect().left
 
-		var e3bottom = document.getElementById('div4').getBoundingClientRect().bottom
-		var e3right = document.getElementById('div4').getBoundingClientRect().right
-		var e3top = document.getElementById('div4').getBoundingClientRect().top
-		var e3left = document.getElementById('div4').getBoundingClientRect().left
+		// var e3bottom = document.getElementById('div4').getBoundingClientRect().bottom
+		// var e3right = document.getElementById('div4').getBoundingClientRect().right
+		// var e3top = document.getElementById('div4').getBoundingClientRect().top
+		// var e3left = document.getElementById('div4').getBoundingClientRect().left
 
+
+	
 
 		// emoji1
 		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
-						dispatch(setSurprisedFace(false))
-						dispatch(setHappyFace(false))
-						dispatch(setAngryFace(false))
-						dispatch(setSadFace(false))
+					
 			
 			faceFxn()
+			console.log(emoji.happyFace)
 			if(emoji.happyFace){
-				console.log('entered')
-				console.log('score', score)
-
-
 				if (emojis.happyEmoji == 0) 
 				{
-					console.log('entered')
 					setScore(score + 5)
-						
-					console.log('ssssss', score)
 					// setPoints(prevState => ({
 					// 	...prevState, finalPoints: score
 					// }))
@@ -292,11 +265,78 @@ function Play() {
 			}
 		}
 
-		if (((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom) &&
-			(sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom) &&
-			(sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)
+		// emoji2
+
+		// if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)) ) {
+		// 	dispatch(setSurprisedFace(false))
+		// 				dispatch(setHappyFace(false))
+		// 				dispatch(setAngryFace(false))
+		// 				dispatch(setSadFace(false))
+			
+		// 	faceFxn()
+		// 	if(emoji.surprisedFace){
+		// 		console.log('entered')
+		// 		console.log('score', score)
+
+
+		// 		if (emojis.surprisedEmoji == 0) 
+		// 		{
+		// 			console.log('entered')
+		// 			setScore(score + 5)
+						
+		// 			console.log('ssssss', score)
+		// 			setEmojis(prevState => ({
+		// 				...prevState, surprisedEmoji: 1
+		// 			}))
+		// 		}
+
+		// 	}else{
+		// 		gameOver()
+		// 	}	
+		// }
+
+
+		// // emoji3
+
+		// if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
+		// 				dispatch(setSurprisedFace(false))
+		// 				dispatch(setHappyFace(false))
+		// 				dispatch(setAngryFace(false))
+		// 				dispatch(setSadFace(false))
+			
+		// 	faceFxn()
+		// 	if(emoji.angryFace){
+		// 		console.log('entered')
+		// 		console.log('score', score)
+
+
+		// 		if (emojis.angryEmoji == 0) 
+		// 		{
+		// 			console.log('entered')
+		// 			setScore(score + 5)
+						
+		// 			console.log('ssssss', score)
+		// 			setEmojis(prevState => ({
+		// 				...prevState, angryEmoji: 1
+		// 			}))
+		// 		}
+
+		// 	}else{
+		// 		gameOver()
+		// 	}
+
+		// }
+
+			//starting div
+
+			if (((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom) 
+			// && (sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom) 
+			// && (sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)
 		  )) {
-			console.log(' start collision')
+			dispatch(setSurprisedFace(false))
+			dispatch(setHappyFace(false))
+			dispatch(setAngryFace(false))
+			dispatch(setSadFace(false))
 			// setTimerAnimation( timerAnimation - 1)
 			// console.log(timerAnimation)
 			if (emojis.happyEmoji == 1) {
@@ -307,69 +347,6 @@ function Play() {
 					angryEmoji: 0
 				}))
 			}
-		}
-
-
-		// emoji2
-
-		if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)) ) {
-			dispatch(setSurprisedFace(false))
-						dispatch(setHappyFace(false))
-						dispatch(setAngryFace(false))
-						dispatch(setSadFace(false))
-			
-			faceFxn()
-			if(emoji.surprisedFace){
-				console.log('entered')
-				console.log('score', score)
-
-
-				if (emojis.surprisedEmoji == 0) 
-				{
-					console.log('entered')
-					setScore(score + 10)
-						
-					console.log('ssssss', score)
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-				}
-
-			}else{
-				gameOver()
-			}	
-		}
-
-
-		// emoji3
-
-		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
-						dispatch(setSurprisedFace(false))
-						dispatch(setHappyFace(false))
-						dispatch(setAngryFace(false))
-						dispatch(setSadFace(false))
-			
-			faceFxn()
-			if(emoji.angryFace){
-				console.log('entered')
-				console.log('score', score)
-
-
-				if (emojis.angryEmoji == 0) 
-				{
-					console.log('entered')
-					setScore(score + 15)
-						
-					console.log('ssssss', score)
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-				}
-
-			}else{
-				gameOver()
-			}
-
 		}
 	}
 
@@ -384,7 +361,7 @@ function Play() {
 			<div class='box'>
 
 				<Link to='/home' className="back_btn"
-				//  onClick={stopVideo}
+				 onClick={stopVideo}
 				>
 					<IconButton aria-label="delete" >
 						<ArrowBackIosRoundedIcon fontSize="small" style={{ color: "#fff" }} />
@@ -404,10 +381,7 @@ function Play() {
 						className="app__videoFeed"
 					/>
 				<div className='container'>
-
-
 					<div className='emoji_bar'>
-
 						<div id='endDiv' className="emoji1" />
 						<div id='startDiv' className="emoji2" />
 						<motion.div
@@ -415,22 +389,15 @@ function Play() {
 							animate={{ x: -500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
 						>
-							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:40}} />
-							<img id='div3' src={surprise} className="emoji"  style={{marginRight:40}}/>
-							<img id='div4' src={angry} className="emoji" style={{marginRight:40}} />
+							<img id='div2' src={emoji1} className="emoji"  style={{marginRight:30}} />
+							{/* <img id='div3' src={surprise} className="emoji"  style={{marginRight:30}}/>
+							<img id='div4' src={angry} className="emoji" style={{marginRight:30}} /> */}
 						</motion.div>
-
-
 					</div>
 					<h2>Score: {score}</h2>
-					{/* <h2>Timer: {timerAnimation}</h2> */}
 				</div>
 				<img className="footer" src={footer} />
-
 			</div>
-
-
-
 		</div>
 	);
 }

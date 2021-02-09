@@ -122,9 +122,10 @@
 .emoji1{
   background-color: tomato;
   position: absolute;
-  width:50px;
-  height:60px;
-  margin-top: -17px;
+  width:5px;
+  height:3px;
+  margin-left: 10px;
+  margin-top: 15px;
   border-radius:50%;
   border:3px solid #e65c00;
   margin-right:10px
@@ -137,9 +138,9 @@
   width:5px;
   height:60px;
   margin-top: -17px;
-
+  visibility: hidden;
   border:3px solid #e65c00;
-right: 0
+  right: 0
   
 }
 
