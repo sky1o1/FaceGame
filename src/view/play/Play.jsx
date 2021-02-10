@@ -44,15 +44,13 @@ function Play() {
 		initialPoints: 0,
 		finalPoints: 0
 	})
-	const [timerAnimation, setTimerAnimation] = useState(8)
+	const [timerAnimation, setTimerAnimation] = useState(10)
 	const [emojis, setEmojis] = useState({
 		happyEmoji: 0,
 		surprisedEmoji: 0,
 		sadEmoji: 0,
 		angryEmoji: 0,
 	})
-	// const [score, setScore] = useState(0)
-	
 
 	const video1 = document.getElementById('video1')
 
@@ -78,7 +76,7 @@ function Play() {
 	}, []);
 
 	const gameOver = () => {
-		var score4 = localStorage.getItem('score')
+		var score4 = parseInt(localStorage.getItem('score'))
 		if (score4 > profile.highScore) {
 			dispatch(setHighScore(score4))
 		}
@@ -141,7 +139,7 @@ function Play() {
 	};
 	
 	function faceFxn(){
-		if(emojis.happyEmoji == 0 || emojis.surprisedEmoji == 0 || emojis.angryEmoji == 0)
+		if(emojis.surprisedEmoji == 0 || emojis.happyEmoji == 0 || emojis.angryEmoji == 0)
 		{
 			if (video1) {
 			// video1.addEventListener('play', () => {				
@@ -211,42 +209,62 @@ function Play() {
 		var e3top = document.getElementById('div4').getBoundingClientRect().top
 		var e3left = document.getElementById('div4').getBoundingClientRect().left
 
+		var e4bottom = document.getElementById('div5').getBoundingClientRect().bottom
+		var e4right = document.getElementById('div5').getBoundingClientRect().right
+		var e4top = document.getElementById('div5').getBoundingClientRect().top
+		var e4left = document.getElementById('div5').getBoundingClientRect().left
+
+		var e5bottom = document.getElementById('div6').getBoundingClientRect().bottom
+		var e5right = document.getElementById('div6').getBoundingClientRect().right
+		var e5top = document.getElementById('div6').getBoundingClientRect().top
+		var e5left = document.getElementById('div6').getBoundingClientRect().left
+
+		var e6bottom = document.getElementById('div7').getBoundingClientRect().bottom
+		var e6right = document.getElementById('div7').getBoundingClientRect().right
+		var e6top = document.getElementById('div7').getBoundingClientRect().top
+		var e6left = document.getElementById('div7').getBoundingClientRect().left
+
+		var e7bottom = document.getElementById('div8').getBoundingClientRect().bottom
+		var e7right = document.getElementById('div8').getBoundingClientRect().right
+		var e7top = document.getElementById('div8').getBoundingClientRect().top
+		var e7left = document.getElementById('div8').getBoundingClientRect().left
+
 
 	
 			//starting div
 
-			if (((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom) 
-
-		  )) {
-			//   console.log('entered nin starting div')
+			if (((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom)) ||
+			((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom)) ||
+			((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)) ||
+			((sleft < e4right) && (sright > e4left) && (sbottom > e4top) && (stop < e4bottom)) ||
+			((sleft < e5right) && (sright > e5left) && (sbottom > e5top) && (stop < e5bottom)) ||
+			((sleft < e6right) && (sright > e6left) && (sbottom > e6top) && (stop < e6bottom)) ||
+			((sleft < e7right) && (sright > e7left) && (sbottom > e7top) && (stop < e7bottom))
+		  ) {
+			  console.log('entered nin starting div')
 			dispatch(setSurprisedFace(false))
 			dispatch(setHappyFace(false))
 			dispatch(setAngryFace(false))
 			dispatch(setSadFace(false))
 			// setTimerAnimation( timerAnimation - 1)
 			// console.log(timerAnimation)
-			if (emojis.happyEmoji == 1) {
+			// if (emojis.happyEmoji == 1 || emojis.surprisedEmoji == 1 || emojis.angryEmoji == 1) {
 				setEmojis(prevState => ({
 					...prevState,
 					 happyEmoji: 0,
 					surprisedEmoji: 0,
 					angryEmoji: 0
 				}))
-			}
+			// }
 		}
 
 		// emoji1
 		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
 					
-			
 			faceFxn()
-			// console.log('happy face emoji',emoji.happyFace)
-
-
 			if(emoji.happyFace){
 				if (emojis.happyEmoji == 0) 
 				{
-					// setScore(score + 5)
 					var score = parseInt(localStorage.getItem('score'))
 					var updatedScore = score+5
 					localStorage.setItem("score",updatedScore);
@@ -272,16 +290,34 @@ function Play() {
 			}
 		}
 
+			// emoji5
+			if (((pleft < e4right) && (pright > e4left) && (pbottom > e4top) && (ptop < e4bottom)) ) {
+					
+				faceFxn()
+				if(emoji.happyFace){
+					if (emojis.happyEmoji == 0) 
+					{
+						var score = parseInt(localStorage.getItem('score'))
+						var updatedScore = score+5
+						localStorage.setItem("score",updatedScore);
+						setEmojis(prevState => ({
+							...prevState, happyEmoji: 1
+						}))
+					}
+	
+				}else{
+					gameOver()
+				}
+			}
+
 		// emoji2
 
 		if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)) ) {
 			
 			faceFxn()
-			// console.log('surprised face emoji',emoji.surprisedFace)
 			if(emoji.surprisedFace){
 				if (emojis.surprisedEmoji == 0) 
 				{
-					// setScore(score + 5)
 					var score2 = parseInt(localStorage.getItem('score'))
 					var updatedScore2 = score2+5
 					localStorage.setItem("score",updatedScore2);
@@ -296,17 +332,86 @@ function Play() {
 			}	
 		}
 
+		if (((pleft < e5right) && (pright > e5left) && (pbottom > e5top) && (ptop < e5bottom)) ) {
+			
+			faceFxn()
+			if(emoji.surprisedFace){
+				if (emojis.surprisedEmoji == 0) 
+				{
+					var score2 = parseInt(localStorage.getItem('score'))
+					var updatedScore2 = score2+5
+					localStorage.setItem("score",updatedScore2);
+
+					setEmojis(prevState => ({
+						...prevState, surprisedEmoji: 1
+					}))
+				}
+
+			}else{
+				gameOver()
+			}	
+		}
+
+		
+	if (((pleft < e6right) && (pright > e6left) && (pbottom > e6top) && (ptop < e6bottom)) ) {
+					
+				faceFxn()
+				if(emoji.happyFace){
+					if (emojis.happyEmoji == 0) 
+					{
+						var score = parseInt(localStorage.getItem('score'))
+						var updatedScore = score+5
+						localStorage.setItem("score",updatedScore);
+	
+						// setPoints(prevState => ({
+						// 	...prevState, finalPoints: score
+						// }))
+						setEmojis(prevState => ({
+							...prevState, happyEmoji: 1
+						}))
+		
+						// if ((points.finalPoints - points.initialPoints) == 10) {
+						// 	console.log(points.finalPoints, points.initialPoints)
+						// 	setPoints(prevState => ({
+						// 		...prevState, initialPoints: score
+						// 	})).then()
+						// 	setTimerAnimation(timerAnimation - 3)
+						// }
+					}
+	
+				}else{
+					gameOver()
+				}
+			}
 
 		// emoji3
 
 		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
 			
 			faceFxn()
-			// console.log('angry face emoji',emoji.angryFace)
 			if(emoji.angryFace){
 				if (emojis.angryEmoji == 0) 
 				{
-					// setScore(score + 5)
+					var score3 = parseInt(localStorage.getItem('score'))
+					var updatedScore3 = score3+5
+					localStorage.setItem("score",updatedScore3);
+					setEmojis(prevState => ({
+						...prevState, angryEmoji: 1
+					}))
+				}
+
+			}else{
+				gameOver()
+			}
+
+		}
+
+		if (((pleft < e7right) && (pright > e7left) && (pbottom > e7top) && (ptop < e7bottom)) ) {
+			
+			faceFxn()
+			if(emoji.angryFace){
+				if (emojis.angryEmoji == 0) 
+				{
 					var score3 = parseInt(localStorage.getItem('score'))
 					var updatedScore3 = score3+5
 					localStorage.setItem("score",updatedScore3);
@@ -361,17 +466,28 @@ function Play() {
 
 						</div>
 						<div id='startDiv' className="emoji2" />
+
+						<div 		className='motionDiv'>
 						<motion.div
 							initial={{ x: 500 }}
-							animate={{ x: -500 }}
+							animate={{ x: -1500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
+					
 						>
-							<img id='div2' src={happy} className="emoji"  style={{marginRight:30}} />
-							<img id='div3' src={surprise} className="emoji"  style={{marginRight:30}}/>
-							<img id='div4' src={angry} className="emoji" style={{marginRight:30}} />
+							<img id='div2' src={happy} className="emoji"  style={{marginRight:80}} />
+							<img id='div3' src={surprise} className="emoji"  style={{marginRight:80}}/>
+							<img id='div5' src={happy} className="emoji"  style={{marginRight:100}} />
+							<img id='div4' src={angry} className="emoji" style={{marginRight:180}} />
+
+							<img id='div6' src={surprise} className="emoji"  style={{marginRight:80}}/>
+							<img id='div7' src={happy} className="emoji"  style={{marginRight:110}} />
+							<img id='div8' src={angry} className="emoji" style={{marginRight:170}} />
+
 						</motion.div>
+						</div>
 					</div>
 					<h2>Score: {localStorage.getItem('score')}</h2>
+			
 				</div>
 				<img className="footer" src={footer} />
 			</div>

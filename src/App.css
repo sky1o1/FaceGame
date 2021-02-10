@@ -76,7 +76,9 @@
   background-color: lightgray;
   border-radius: 20px;
 }
-
+.motionDiv{
+  width: 1700px;
+}
 .progress-done {
   height: 100%;
   width: 0;
@@ -140,7 +142,6 @@
   margin-top: -17px;
   border:px solid #e65c00;
   right: 0
-  
 }
 
 #endDivConatainer{
