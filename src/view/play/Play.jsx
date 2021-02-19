@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import footer from '../../assets/gif/gif.gif';
+import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
 import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
-import happy from '../../assets/emoji/happy.png';
-import angry from '../../assets/emoji/angry.png';
-import surprise from '../../assets/emoji/surprise1.png';
+import topbar from '../../assets/Top & Bottom Bars/TopBarOg.png'
+import happy from '../../assets/Emojis/HappyEmoji.png';
+import angry from '../../assets/Emojis/AngryEmoji.png';
+import surprise from '../../assets/Emojis/SurprisedEmoji.png';
 import audio from '../../assets/sound/sad.mp3';
 import { motion } from 'framer-motion';
-import Script from '../emojiDetection/Script';
 import { setHighScore, setScores } from '../../store/profile';
 import * as faceapi from "face-api.js"
 import { setHappyFace, setSadFace, setAngryFace, setSurprisedFace } from '../../store/emoji';
@@ -21,14 +21,14 @@ import { setHappyFace, setSadFace, setAngryFace, setSurprisedFace } from '../../
 const BorderLinearProgress = withStyles((theme) => ({
 	root: {
 		height: 10,
-		borderRadius: 5,
+		borderRadius: 50,
 	},
 	colorPrimary: {
-		backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+		backgroundColor: '#EF527C'
 	},
 	bar: {
 		borderRadius: 5,
-		backgroundColor: '#e65c00',
+		backgroundColor: '#FF8C00',
 		borderWidth: 5
 	},
 }))(LinearProgress);
@@ -81,7 +81,7 @@ function Play() {
 			dispatch(setHighScore(score4))
 		}
 
-		if(score4 >= 20){
+		if(score4 >= 100){
 			dispatch(setScores(score4))
 			stopVideo()
 			history.push('/gameover')
@@ -198,7 +198,6 @@ function Play() {
 		var e1top = document.getElementById('div2').getBoundingClientRect().top
 		var e1left = document.getElementById('div2').getBoundingClientRect().left
 
-
 		var e2bottom = document.getElementById('div3').getBoundingClientRect().bottom
 		var e2right = document.getElementById('div3').getBoundingClientRect().right
 		var e2top = document.getElementById('div3').getBoundingClientRect().top
@@ -241,7 +240,6 @@ function Play() {
 			((sleft < e6right) && (sright > e6left) && (sbottom > e6top) && (stop < e6bottom)) ||
 			((sleft < e7right) && (sright > e7left) && (sbottom > e7top) && (stop < e7bottom))
 		  ) {
-			  console.log('entered nin starting div')
 			dispatch(setSurprisedFace(false))
 			dispatch(setHappyFace(false))
 			dispatch(setAngryFace(false))
@@ -292,7 +290,7 @@ function Play() {
 
 			// emoji5
 			if (((pleft < e4right) && (pright > e4left) && (pbottom > e4top) && (ptop < e4bottom)) ) {
-					
+				
 				faceFxn()
 				if(emoji.happyFace){
 					if (emojis.happyEmoji == 0) 
@@ -304,8 +302,7 @@ function Play() {
 							...prevState, happyEmoji: 1
 						}))
 					}
-	
-				}else{
+					}else{
 					gameOver()
 				}
 			}
@@ -419,7 +416,6 @@ function Play() {
 						...prevState, angryEmoji: 1
 					}))
 				}
-
 			}else{
 				gameOver()
 			}
@@ -438,17 +434,68 @@ function Play() {
 
 			<div class='box'>
 
-				<Link to='/home' className="back_btn"
+					<img 
+					style={{
+						height: 'auto',
+						width: '100%',
+						position: 'absolute',
+						display: 'flex',
+						zIndex: 1000
+					}} 
+					src={topbar} />
+				
+				{/* <Link to='/home' className="back_btn"
 				 onClick={stopVideo}
 				>
-					<IconButton aria-label="delete" >
+					<IconButton style={{position: 'relative'}} aria-label="delete" >
 						<ArrowBackIosRoundedIcon fontSize="small" style={{ color: "#fff" }} />
 					</IconButton>
-				</Link>
-
-				{/* <BorderLinearProgress className="right" variant="determinate" value={progress} /> */}
+				</Link> */}
+				<div style={{
+					display: 'flex'
+				}}>
+		<h2  style={{
+					position: 'absolute',
+					zIndex: 1001, 
+					left: 10,
+					fontSize: 26,
+					color: '#fff',
+					marginTop : 15,
+					marginLeft: 15
+					}} >
+						TIME
+						</h2>
+				<BorderLinearProgress className="right" style={{
+					width: 200,
+					marginLeft: 15,
+					marginTop: 10
+				}} 
+				variant="determinate" value={progress} />
 				
-				<h2>Score: {localStorage.getItem('score')}</h2>
+				 <div style={{
+					 textAlign: 'end'
+				 }}>
+
+			
+				<h2 style={{
+					position: 'absolute',
+					zIndex: 1001, 
+					right: 10,
+					fontSize: 26,
+					color: '#fff',
+					marginRight: 15
+					}} 
+					 >
+					 SCORE <br/> 
+					 <h2 style={{
+						 		 marginTop : 0,
+						 color: '#fff',
+						 fontSize: 45
+					 }}>{localStorage.getItem('score')}</h2>
+					 
+					</h2>
+					</div>
+					</div>
 				<audio className="audio-element">
 					<source src={audio}></source>
 				</audio>
@@ -458,35 +505,32 @@ function Play() {
 						muted
 						autoPlay
 						className="app__videoFeed"
+						style={{
+							position: 'absolute'
+						}}
 					/>
 				<div className='container'>
 					<div className='emoji_bar'>
 						<div id='endDivConatainer'>
 						<div id='endDiv' className="emoji1" />
-
 						</div>
-						<div id='startDiv' className="emoji2" />
-
-						<div 		className='motionDiv'>
+						<div id='startDiv' className="emoji2"/>
+						<div className='motionDiv'>
 						<motion.div
 							initial={{ x: 500 }}
 							animate={{ x: -1500 }}
 							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
-					
 						>
 							<img id='div2' src={happy} className="emoji"  style={{marginRight:80}} />
 							<img id='div3' src={surprise} className="emoji"  style={{marginRight:80}}/>
 							<img id='div5' src={happy} className="emoji"  style={{marginRight:100}} />
 							<img id='div4' src={angry} className="emoji" style={{marginRight:180}} />
-
 							<img id='div6' src={surprise} className="emoji"  style={{marginRight:80}}/>
 							<img id='div7' src={happy} className="emoji"  style={{marginRight:110}} />
 							<img id='div8' src={angry} className="emoji" style={{marginRight:170}} />
-
 						</motion.div>
 						</div>
 					</div>
-					<h2>Score: {localStorage.getItem('score')}</h2>
 			
 				</div>
 				<img className="footer" src={footer} />

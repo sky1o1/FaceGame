@@ -35,14 +35,29 @@ const dispatch = useDispatch()
     <Router>
     <Switch>
      
-      <Route exact path="/">
+      {/* <Route exact path="/">
         <Login />
+      </Route>  */}
+      {/* <Route exact path="/home">
+        <Home />
+      </Route>  */}
+      <Route exact path="/">
+        <Play />
       </Route> 
-      <PrivateRoute path="/home" component={Home} />
+      {/* <Route exact path="/profile">
+        <Profile />
+      </Route>  */}
+      {/* <Route exact path="/script">
+        <Script />
+      </Route>  */}
+       <Route exact path="/gameover">
+        <GameOver />
+      </Route> 
+      {/* <PrivateRoute path="/home" component={Home} />
       <PrivateRoute path="/play" component={Play} />
       <PrivateRoute path="/profile" component={Profile} />
       <PrivateRoute path="/script" component={Script} />
-      <PrivateRoute path="/gameover" component={GameOver} />
+      <PrivateRoute path="/gameover" component={GameOver} /> */}
     </Switch>
   </Router>
   );

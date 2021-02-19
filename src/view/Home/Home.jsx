@@ -7,7 +7,7 @@ import { makeStyles, Grid, Card, Button } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import footer from '../../assets/image/GIF.png';
+import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
 import logo from '../../assets/image/logo.png';
 
 import '../../assets/css/style.css'
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 
     },
     btn: {
-        // textDecoration: 'none',
         textDecorationColor: 'none'
     }
 }))
@@ -63,11 +62,11 @@ function Home() {
                           </span></a>
                         </Link>
 
-                        <Link onClick={logout} className="game_font">
+                        {/* <Link onClick={logout} className="game_font">
                           <a class="fancy-button bg-gradient1 green"><span class="game_font"><i class="fa fa-wheelchair-alt"></i>
                             Leave
                           </span></a>
-                        </Link>
+                        </Link> */}
                       </div>
                     
                     <img className="footer" src={footer}/>
