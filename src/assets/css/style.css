@@ -84,21 +84,18 @@ body{
     max-width: 500px;
     height: 100vh;
     overflow: hidden;
-    background: #e65c00;  
-    background: -webkit-linear-gradient(to right, #F9D423, #e65c00);  
-    background: linear-gradient(to right, #F9D423, #e65c00);
+    
    
   }
   .footer {
    position:absolute;
-  background-color: #000000;
+
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
-   -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
--moz-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-box-shadow: 0px 0px 10px rgba(0,0,0,.8)
+  height: auto;
+  
+
   }
   /* Mixins */
   /* bg shortcodes */
@@ -541,7 +538,8 @@ border:7px solid #ebcb97;
 .username_player{
   margin-top: 20px;
   font-size: 40px;
- 
+  position: relative;
+ z-index: 1103;
   color: whitesmoke;
   text-shadow: 6px 0 6px #a84308, 5px 5px 5px #ed832d, 0 6px 6px #af4600;
   font-family: 'Concert One', cursive;
