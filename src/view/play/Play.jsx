@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
-import { Link } from "react-router-dom";
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 import topbar from '../../assets/Top & Bottom Bars/TopBarOg.png'
@@ -12,6 +9,9 @@ import happy from '../../assets/Emojis/HappyEmoji.png';
 import angry from '../../assets/Emojis/AngryEmoji.png';
 import surprise from '../../assets/Emojis/SurprisedEmoji.png';
 import audio from '../../assets/sound/sad.mp3';
+import score1 from '../../assets/Scores/ScoreOkay+1.png';
+import score2 from '../../assets/Scores/ScoreGreat+2.png';
+import score3 from '../../assets/Scores/ScorePerfect+3.png';
 import { motion } from 'framer-motion';
 import { setHighScore, setScores } from '../../store/profile';
 import * as faceapi from "face-api.js"
@@ -44,6 +44,11 @@ function Play() {
 		initialPoints: 0,
 		finalPoints: 0
 	})
+	const [img, setImg] = useState({
+		happyImg: false,
+		surprisedImg: false,
+		angryImg: false
+	})
 	const [timerAnimation, setTimerAnimation] = useState(10)
 	const [emojis, setEmojis] = useState({
 		happyEmoji: 0,
@@ -55,12 +60,12 @@ function Play() {
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
+		localStorage.setItem('score',0)
 		const audioEl = document.getElementsByClassName("audio-element")[0]
 		audioEl.play()
 
-		localStorage.setItem('score', 0)
-
 		const timer = setInterval(() => {
+			
 			setProgress((oldProgress) => {
 				if (oldProgress === 100) {
 					return 0;
@@ -244,6 +249,12 @@ function Play() {
 			dispatch(setHappyFace(false))
 			dispatch(setAngryFace(false))
 			dispatch(setSadFace(false))
+			setImg(prevData => ({
+				...prevData, 
+				happyImg: false,
+				surprisedImg: false,
+				angryImg: false
+			}))
 			// setTimerAnimation( timerAnimation - 1)
 			// console.log(timerAnimation)
 			// if (emojis.happyEmoji == 1 || emojis.surprisedEmoji == 1 || emojis.angryEmoji == 1) {
@@ -273,7 +284,13 @@ function Play() {
 					setEmojis(prevState => ({
 						...prevState, happyEmoji: 1
 					}))
-	
+
+					setImg(prevData => ({
+						...prevData, 
+						happyImg: true,
+						surprisedImg: false,
+						angryImg: false
+					}))
 					// if ((points.finalPoints - points.initialPoints) == 10) {
 					// 	console.log(points.finalPoints, points.initialPoints)
 					// 	setPoints(prevState => ({
@@ -301,6 +318,12 @@ function Play() {
 						setEmojis(prevState => ({
 							...prevState, happyEmoji: 1
 						}))
+						setImg(prevData => ({
+							...prevData, 
+							happyImg: true,
+							surprisedImg: false,
+							angryImg: false
+						}))
 					}
 					}else{
 					gameOver()
@@ -322,6 +345,12 @@ function Play() {
 					setEmojis(prevState => ({
 						...prevState, surprisedEmoji: 1
 					}))
+					setImg(prevData => ({
+						...prevData, 
+						happyImg: false,
+						surprisedImg: true,
+						angryImg: false
+					}))
 				}
 
 			}else{
@@ -341,6 +370,12 @@ function Play() {
 
 					setEmojis(prevState => ({
 						...prevState, surprisedEmoji: 1
+					}))
+					setImg(prevData => ({
+						...prevData, 
+						happyImg: false,
+						surprisedImg: true,
+						angryImg: false
 					}))
 				}
 
@@ -366,7 +401,12 @@ function Play() {
 						setEmojis(prevState => ({
 							...prevState, happyEmoji: 1
 						}))
-		
+						setImg(prevData => ({
+							...prevData, 
+							happyImg: true,
+							surprisedImg: false,
+							angryImg: false
+						}))
 						// if ((points.finalPoints - points.initialPoints) == 10) {
 						// 	console.log(points.finalPoints, points.initialPoints)
 						// 	setPoints(prevState => ({
@@ -395,6 +435,12 @@ function Play() {
 					setEmojis(prevState => ({
 						...prevState, angryEmoji: 1
 					}))
+					setImg(prevData => ({
+						...prevData, 
+						happyImg: false,
+						surprisedImg: false,
+						angryImg: true
+					}))
 				}
 
 			}else{
@@ -414,6 +460,12 @@ function Play() {
 					localStorage.setItem("score",updatedScore3);
 					setEmojis(prevState => ({
 						...prevState, angryEmoji: 1
+					}))
+					setImg(prevData => ({
+						...prevData, 
+						happyImg: false,
+						surprisedImg: false,
+						angryImg: true
 					}))
 				}
 			}else{
@@ -440,9 +492,32 @@ function Play() {
 						width: '100%',
 						position: 'absolute',
 						display: 'flex',
-						zIndex: 1000
+						zIndex: 1000,
 					}} 
 					src={topbar} />
+
+					{
+						(img.happyImg)?
+						<img className='scoreImg' src={score1}/>
+						:
+						null
+					}
+
+
+{
+						(img.surprisedImg)?
+						<img className='scoreImg' src={score2}/>
+						:
+						null
+					}
+
+{
+						(img.angryImg)?
+						<img className='scoreImg'src={score3} />
+						:
+						null
+					}
+					
 				
 				{/* <Link to='/home' className="back_btn"
 				 onClick={stopVideo}
@@ -497,7 +572,7 @@ function Play() {
 					</div>
 					</div>
 				<audio className="audio-element">
-					<source src={audio}></source>
+					<source src={audio} />
 				</audio>
 					<video
 						id='video1'
