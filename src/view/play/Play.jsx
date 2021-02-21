@@ -86,7 +86,7 @@ function Play() {
 			dispatch(setHighScore(score4))
 		}
 
-		if(score4 >= 100){
+		if(score4 >= 50){
 			dispatch(setScores(score4))
 			stopVideo()
 			history.push('/gameover')
@@ -275,7 +275,7 @@ function Play() {
 				if (emojis.happyEmoji == 0) 
 				{
 					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+5
+					var updatedScore = score+3
 					localStorage.setItem("score",updatedScore);
 
 					// setPoints(prevState => ({
@@ -313,7 +313,7 @@ function Play() {
 					if (emojis.happyEmoji == 0) 
 					{
 						var score = parseInt(localStorage.getItem('score'))
-						var updatedScore = score+5
+						var updatedScore = score+3
 						localStorage.setItem("score",updatedScore);
 						setEmojis(prevState => ({
 							...prevState, happyEmoji: 1
@@ -339,7 +339,7 @@ function Play() {
 				if (emojis.surprisedEmoji == 0) 
 				{
 					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+5
+					var updatedScore2 = score2+3
 					localStorage.setItem("score",updatedScore2);
 
 					setEmojis(prevState => ({
@@ -365,7 +365,7 @@ function Play() {
 				if (emojis.surprisedEmoji == 0) 
 				{
 					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+5
+					var updatedScore2 = score2+3
 					localStorage.setItem("score",updatedScore2);
 
 					setEmojis(prevState => ({
@@ -392,7 +392,7 @@ function Play() {
 					if (emojis.happyEmoji == 0) 
 					{
 						var score = parseInt(localStorage.getItem('score'))
-						var updatedScore = score+5
+						var updatedScore = score+3
 						localStorage.setItem("score",updatedScore);
 	
 						// setPoints(prevState => ({
@@ -430,7 +430,7 @@ function Play() {
 				if (emojis.angryEmoji == 0) 
 				{
 					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+5
+					var updatedScore3 = score3+3
 					localStorage.setItem("score",updatedScore3);
 					setEmojis(prevState => ({
 						...prevState, angryEmoji: 1
@@ -456,7 +456,7 @@ function Play() {
 				if (emojis.angryEmoji == 0) 
 				{
 					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+5
+					var updatedScore3 = score3+3
 					localStorage.setItem("score",updatedScore3);
 					setEmojis(prevState => ({
 						...prevState, angryEmoji: 1
@@ -497,14 +497,14 @@ function Play() {
 					src={topbar} />
 
 					{
-						(img.happyImg)?
-						<img className='scoreImg' src={score1}/>
+						(img.happyImg || img.surprisedImg || img.angryImg)?
+						<img className='scoreImg' src={score3}/>
 						:
 						null
 					}
 
 
-{
+{/* {
 						(img.surprisedImg)?
 						<img className='scoreImg' src={score2}/>
 						:
@@ -516,7 +516,7 @@ function Play() {
 						<img className='scoreImg'src={score3} />
 						:
 						null
-					}
+					} */}
 					
 				
 				{/* <Link to='/home' className="back_btn"
