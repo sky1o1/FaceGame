@@ -60,21 +60,21 @@ function Play() {
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
+		// const audioEl = document.getElementsByClassName("audio-element")[0]
+		// audioEl.play()
 		localStorage.setItem('score',0)
-		const audioEl = document.getElementsByClassName("audio-element")[0]
-		audioEl.play()
 
 		const timer = setInterval(() => {
 			
 			setProgress((oldProgress) => {
 				if (oldProgress === 100) {
+					gameOver()
 					return 0;
 				}
-				const diff = Math.random() * 10;
+				const diff = Math.random() * 3;
 				return Math.min(oldProgress + diff, 100);
 			});
 		}, 500);
-
 		return () => {
 			clearInterval(timer);
 		};
@@ -82,15 +82,22 @@ function Play() {
 
 	const gameOver = () => {
 		var score4 = parseInt(localStorage.getItem('score'))
-		if (score4 > profile.highScore) {
-			dispatch(setHighScore(score4))
-		}
+		// if (score4 > profile.highScore) {
+		// 	dispatch(setHighScore(score4))
+		// }
 
-		if(score4 >= 50){
+		// if(score4 >= 50){
+		// 	dispatch(setScores(score4))
+		// 	stopVideo()
+		// 	history.push('/gameover')
+		// }
+		if(progress == 0){
 			dispatch(setScores(score4))
 			stopVideo()
 			history.push('/gameover')
 		}
+
+		
 	}
 
 	useEffect(() => {
@@ -147,8 +154,6 @@ function Play() {
 		if(emojis.surprisedEmoji == 0 || emojis.happyEmoji == 0 || emojis.angryEmoji == 0)
 		{
 			if (video1) {
-			// video1.addEventListener('play', () => {				
-
 				const canvas = faceapi.createCanvasFromMedia(video1)
 				document.body.append(canvas)
 				const displaySize = { width: video1.width, height: video1.height }
@@ -157,15 +162,11 @@ function Play() {
 				const faceApi = async () => {
 						try {
 								const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-								console.log('entered')
 							if (detections[0].expressions.happy >= 0.7) {
-								console.log('happy face')
 								dispatch(setHappyFace(true))
 							} else if (detections[0].expressions.angry >= 0.7) {
-								console.log('angry face')
 								dispatch(setAngryFace(true))
 							} else if (detections[0].expressions.surprised >= 0.7) {
-								console.log('surprise face')
 								dispatch(setSurprisedFace(true))
 							}
 							//  else if (detections[0].expressions.sad >= 0.8) {
@@ -174,14 +175,12 @@ function Play() {
 							// }
 							
 						} catch (err) {
-							// console.log(err)
 						}
 						canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
 					}
 					faceApi()
 		}
 		else {
-			// console.log('error loading vdo')
 		}
 
 		}
@@ -394,10 +393,6 @@ function Play() {
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score+3
 						localStorage.setItem("score",updatedScore);
-	
-						// setPoints(prevState => ({
-						// 	...prevState, finalPoints: score
-						// }))
 						setEmojis(prevState => ({
 							...prevState, happyEmoji: 1
 						}))
