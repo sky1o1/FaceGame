@@ -47,7 +47,7 @@ function Play() {
 		surprisedImg: false,
 		angryImg: false
 	})
-	const timerAnimation = 12
+	const timerAnimation = 10
 	const [emojis, setEmojis] = useState({
 		happyEmoji: 0,
 		surprisedEmoji: 0,
@@ -127,7 +127,7 @@ function Play() {
 					gameOver()
 					return 0;
 				}
-				const diff = Math.random() * 1;
+				const diff = Math.random() * 3;
 				return Math.min(oldProgress + diff, 100);
 			});
 		}, 500);
@@ -154,12 +154,11 @@ function Play() {
 		// 	stopVideo()
 		// 	history.push('/gameover')
 		// }
-		if(progress == 0){
+		
 			dispatch(setScores(score4))
 			stopVideo()
 			history.push('/gameover')
 		}
-	}
 
 	function faceFxn(){
 		if(emojis.surprisedEmoji == 0 || emojis.happyEmoji == 0 || emojis.angryEmoji == 0)
@@ -294,8 +293,6 @@ function Play() {
 						angryImg: false
 					}))
 				}
-			}else{
-				gameOver()
 			}
 		}
 
@@ -318,8 +315,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -341,8 +336,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}}
 
@@ -368,8 +361,6 @@ function Play() {
 						angryImg: false
 					}))
 				}
-			}else{
-				gameOver()
 			}
 		}
 
@@ -392,8 +383,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -415,8 +404,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 	}
@@ -443,8 +430,6 @@ function Play() {
 						angryImg: false
 					}))
 				}
-			}else{
-				gameOver()
 			}
 		}
 
@@ -467,8 +452,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -490,8 +473,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -518,8 +499,6 @@ function Play() {
 						angryImg: false
 					}))
 				}
-			}else{
-				gameOver()
 			}
 		}
 
@@ -542,8 +521,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -565,8 +542,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -595,8 +570,6 @@ function Play() {
 						angryImg: false
 					}))
 				}
-			}else{
-				gameOver()
 			}
 		}
 
@@ -619,8 +592,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 
@@ -642,8 +613,6 @@ function Play() {
 					}))
 				}
 
-			}else{
-				gameOver()
 			}
 		}
 	}
@@ -823,7 +792,6 @@ function Play() {
 						null
 					}
 
-
 {/* {
 						(img.surprisedImg)?
 						<img className='scoreImg' src={score2}/>
@@ -911,7 +879,7 @@ function Play() {
 						>
 
 			{
-								loop && loop.map((l) => (
+							loop && loop.map((l) => (
 								<>
 								<img id='div2' src={scoreImg} className="emoji"  style={{marginRight:80}} />
 								<img id='div3' src={scoreImg1} className="emoji"  style={{marginRight:80}} />
