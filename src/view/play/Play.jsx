@@ -8,7 +8,6 @@ import topbar from '../../assets/Top & Bottom Bars/TopBarOg.png'
 import happy from '../../assets/Emojis/HappyEmoji.png';
 import angry from '../../assets/Emojis/AngryEmoji.png';
 import surprise from '../../assets/Emojis/SurprisedEmoji.png';
-import audio from '../../assets/sound/sad.mp3';
 import score1 from '../../assets/Scores/ScoreOkay+1.png';
 import score2 from '../../assets/Scores/ScoreGreat+2.png';
 import score3 from '../../assets/Scores/ScorePerfect+3.png';
@@ -43,9 +42,15 @@ function Play() {
 	const [scoreImg1, setScoreImg1] = useState([angry])
 	const [scoreImg2, setScoreImg2] = useState([surprise])
 	const [img, setImg] = useState({
-		happyImg: false,
-		surprisedImg: false,
-		angryImg: false
+		happyImg30: false,
+		surprisedImg30: false,
+		angryImg30: false,
+		happyImg50: false,
+		surprisedImg50: false,
+		angryImg50: false,
+		happyImg70: false,
+		surprisedImg70: false,
+		angryImg70: false
 	})
 	const timerAnimation = 10
 	const [emojis, setEmojis] = useState({
@@ -59,6 +64,19 @@ function Play() {
 	const randomData1 = [happy, angry, surprise]
 	const randomData2 = [happy, angry, surprise]
 
+
+	const [percentage, setPercentage] = useState({
+		happy30: false,
+		angry30: false,
+		surprised30: false,
+		happy50: false,
+		angry50: false,
+		surprised50: false,
+		happy70: false,
+		angry70: false,
+		surprised70: false,
+	})
+
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
@@ -69,29 +87,26 @@ function Play() {
 			setScoreImg(randomData[randomArray])
 			setScoreImg1(randomData1[randomArray1])
 			setScoreImg2(randomData2[randomArray2])
-		},10000);
+		}, 10000);
 
 		return () => clearInterval(interval);
-	},[])
-	
-	useEffect(() => {
-		const audioEl = document.getElementsByClassName("audio-element")[0]
-		audioEl.play()
+	}, [])
 
+	useEffect(() => {
 		async function loadModels() {
 			await Promise.all([
 				faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
 				faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
 				faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
 				faceapi.nets.faceExpressionNet.loadFromUri('/models')
-				]).catch(error => {
+			]).catch(error => {
 				console.error(error)
 			})
 		}
 		loadModels()
 
-		localStorage.setItem('score',0)
-		
+		localStorage.setItem('score', 0)
+
 		function startVideo() {
 			async function getMedia() {
 				let stream = null;
@@ -121,7 +136,7 @@ function Play() {
 		startVideo()
 
 		const timer = setInterval(() => {
-			
+
 			setProgress((oldProgress) => {
 				if (oldProgress === 100) {
 					gameOver()
@@ -134,7 +149,7 @@ function Play() {
 		return () => {
 			clearInterval(timer);
 		};
-	
+
 	}, []);
 
 
@@ -154,44 +169,82 @@ function Play() {
 		// 	stopVideo()
 		// 	history.push('/gameover')
 		// }
-		
-			dispatch(setScores(score4))
-			stopVideo()
-			history.push('/gameover')
-		}
 
-	function faceFxn(){
-		if(emojis.surprisedEmoji == 0 || emojis.happyEmoji == 0 || emojis.angryEmoji == 0)
-		{
+		dispatch(setScores(score4))
+		stopVideo()
+		history.push('/gameover')
+	}
+
+	function faceFxn() {
+		if (emojis.surprisedEmoji == 0 || emojis.happyEmoji == 0 || emojis.angryEmoji == 0) {
 			if (video1) {
 				// const canvas = faceapi.createCanvasFromMedia(video1)
 				// document.body.append(canvas)
 				// const displaySize = { width: video1.width, height: video1.height }
 				// faceapi.matchDimensions(canvas, displaySize)
-					
+
 				const faceApi = async () => {
-						try {
-								const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-							if (detections[0].expressions.happy >= 0.7) {
-								dispatch(setHappyFace(true))
-							} else if (detections[0].expressions.angry >= 0.7) {
-								dispatch(setAngryFace(true))
-							} else if (detections[0].expressions.surprised >= 0.7) {
-								dispatch(setSurprisedFace(true))
-							}
-							//  else if (detections[0].expressions.sad >= 0.8) {
-							// 	console.log('sad face')
-							// 	dispatch(setSadFace(true))
-							// }
-							
-						} catch (err) {
+					try {
+						const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+						if (detections[0].expressions.happy <= 0.3) {
+							// dispatch(setHappyFace(true));
+							setPercentage((prevState) => ({
+								...prevState, happy30: true
+							}))
+						} else if (detections[0].expressions.angry <= 0.3) {
+							// dispatch(setAngryFace(true))
+							setPercentage((prevState) => ({
+								...prevState, angry30: true
+							}))
+						} else if (detections[0].expressions.surprised <= 0.3) {
+							// dispatch(setSurprisedFace(true))
+							setPercentage((prevState) => ({
+								...prevState, surprised0: true
+							}))
+						} else if (detections[0].expressions.happy == 0.5) {
+							// dispatch(setHappyFace(true))
+							setPercentage((prevState) => ({
+								...prevState, happy50: true
+							}))
+						} else if (detections[0].expressions.angry == 0.5) {
+							// dispatch(setAngryFace(true))
+							setPercentage((prevState) => ({
+								...prevState, angry50: true
+							}))
+						} else if (detections[0].expressions.surprised == 0.5) {
+							// dispatch(setSurprisedFace(true))
+							setPercentage((prevState) => ({
+								...prevState, surprised50: true
+							}))
+						} else if (detections[0].expressions.happy >= 0.7) {
+							// dispatch(setHappyFace(true))
+							setPercentage((prevState) => ({
+								...prevState, happy70: true
+							}))
+						} else if (detections[0].expressions.angry >= 0.7) {
+							// dispatch(setAngryFace(true))
+							setPercentage((prevState) => ({
+								...prevState, angry70: true
+							}))
+						} else if (detections[0].expressions.surprised >= 0.7) {
+							// dispatch(setSurprisedFace(true))
+							setPercentage((prevState) => ({
+								...prevState, surprised70: true
+							}))
 						}
-						// canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+						//  else if (detections[0].expressions.sad >= 0.8) {
+						// 	console.log('sad face')
+						// 	dispatch(setSadFace(true))
+						// }
+
+					} catch (err) {
 					}
-					faceApi()
-		}
-		else {
-		}
+					// canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+				}
+				faceApi()
+			}
+			else {
+			}
 		}
 	}
 
@@ -241,529 +294,1076 @@ function Play() {
 		// var e7top = document.getElementById('div8').getBoundingClientRect().top
 		// var e7left = document.getElementById('div8').getBoundingClientRect().left
 
-	//starting div
+		//starting div
 
 		if (((sleft < e1right) && (sright > e1left) && (sbottom > e1top) && (stop < e1bottom)) ||
 			((sleft < e2right) && (sright > e2left) && (sbottom > e2top) && (stop < e2bottom)) ||
 			((sleft < e3right) && (sright > e3left) && (sbottom > e3top) && (stop < e3bottom)) ||
 			((sleft < e4right) && (sright > e4left) && (sbottom > e4top) && (stop < e4bottom)) ||
-			((sleft < e5right) && (sright > e5left) && (sbottom > e5top) && (stop < e5bottom)) 
+			((sleft < e5right) && (sright > e5left) && (sbottom > e5top) && (stop < e5bottom))
 			// ((sleft < e6right) && (sright > e6left) && (sbottom > e6top) && (stop < e6bottom)) ||
 			// ((sleft < e7right) && (sright > e7left) && (sbottom > e7top) && (stop < e7bottom))
-		  ) {
+		) {
 			dispatch(setSurprisedFace(false))
 			dispatch(setHappyFace(false))
 			dispatch(setAngryFace(false))
 			dispatch(setSadFace(false))
 			setImg(prevData => ({
-				...prevData, 
-				happyImg: false,
-				surprisedImg: false,
-				angryImg: false
+				...prevData,
+				happyImg30: false,
+				surprisedImg30: false,
+				angryImg30: false,
+				happyImg50: false,
+				surprisedImg50: false,
+				angryImg50: false,
+				happyImg70: false,
+				surprisedImg70: false,
+				angryImg70: false
 			}))
-				setEmojis(prevState => ({
-					...prevState,
-					 happyEmoji: 0,
-					surprisedEmoji: 0,
-					angryEmoji: 0
-				}))
+			setEmojis(prevState => ({
+				...prevState,
+				happyEmoji: 0,
+				surprisedEmoji: 0,
+				angryEmoji: 0
+			}))
+
+			setPercentage((prevState) => ({
+				...prevState,
+				happy30: false,
+				angry30: false,
+				surprised30: false,
+				happy50: false,
+				angry50: false,
+				surprised50: false,
+				happy70: false,
+				angry70: false,
+				surprised70: false,
+			}))
 			// }
 		}
 
 		// emoji1
-		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom)) ) {
-					
+		if (((pleft < e1right) && (pright > e1left) && (pbottom > e1top) && (ptop < e1bottom))) {
+
 			faceFxn()
- 			//FOR SCORE IMAGE 
-			if(scoreImg === happy){
-			if(emoji.happyFace){
-				if (emojis.happyEmoji == 0) 
-				{
-					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+3
-					localStorage.setItem("score",updatedScore);
-					setEmojis(prevState => ({
-						...prevState, happyEmoji: 1
-					}))
+			//FOR SCORE PERCENTAGE 30 
+			if (scoreImg === happy) {
+				if (percentage.happy30) {
+					if (emojis.happyEmoji == 0) {
+						var score = parseInt(localStorage.getItem('score'))
+						var updatedScore = score + 1
+						localStorage.setItem("score", updatedScore);
+						setEmojis(prevState => ({
+							...prevState, happyEmoji: 1
+						}))
 
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: true,
-						surprisedImg: false,
-						angryImg: false
-					}))
+						setImg(prevData => ({
+							...prevData,
+							happyImg30: true,
+						}))
+					}
 				}
 			}
+
+			if (scoreImg === surprise) {
+				if (percentage.surprised30) {
+					if (emojis.surprisedEmoji == 0) {
+						var score2 = parseInt(localStorage.getItem('score'))
+						var updatedScore2 = score2 + 1
+						localStorage.setItem("score", updatedScore2);
+
+						setEmojis(prevState => ({
+							...prevState, surprisedEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							surprisedImg30: true,
+						}))
+					}
+
+				}
+			}
+
+			if (scoreImg === angry) {
+				if (percentage.angry30) {
+					if (emojis.angryEmoji == 0) {
+						var score3 = parseInt(localStorage.getItem('score'))
+						var updatedScore3 = score3 + 1
+						localStorage.setItem("score", updatedScore3);
+						setEmojis(prevState => ({
+							...prevState, angryEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							angryImg30: true
+						}))
+					}
+
+				}
+			}
+
+			// FOR SCORE PERCENTAGE 50
+
+			if (scoreImg === happy) {
+				if (percentage.happy50) {
+					if (emojis.happyEmoji == 0) {
+						var score = parseInt(localStorage.getItem('score'))
+						var updatedScore = score + 2
+						localStorage.setItem("score", updatedScore);
+						setEmojis(prevState => ({
+							...prevState, happyEmoji: 1
+						}))
+
+						setImg(prevData => ({
+							...prevData,
+							happyImg50: true,
+						}))
+					}
+				}
+			}
+
+			if (scoreImg === surprise) {
+				if (percentage.surprised50) {
+					if (emojis.surprisedEmoji == 0) {
+						var score2 = parseInt(localStorage.getItem('score'))
+						var updatedScore2 = score2 + 2
+						localStorage.setItem("score", updatedScore2);
+
+						setEmojis(prevState => ({
+							...prevState, surprisedEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							surprisedImg50: true,
+						}))
+					}
+
+				}
+			}
+
+			if (scoreImg === angry) {
+				if (percentage.angry50) {
+					if (emojis.angryEmoji == 0) {
+						var score3 = parseInt(localStorage.getItem('score'))
+						var updatedScore3 = score3 + 2
+						localStorage.setItem("score", updatedScore3);
+						setEmojis(prevState => ({
+							...prevState, angryEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							angryImg50: true
+						}))
+					}
+
+				}
+			}
+
+			//FOR SCORE PERCENTAGE 70
+
+			if (scoreImg === happy) {
+				if (percentage.happy70) {
+					if (emojis.happyEmoji == 0) {
+						var score = parseInt(localStorage.getItem('score'))
+						var updatedScore = score + 3
+						localStorage.setItem("score", updatedScore);
+						setEmojis(prevState => ({
+							...prevState, happyEmoji: 1
+						}))
+
+						setImg(prevData => ({
+							...prevData,
+							happyImg70: true,
+						}))
+					}
+				}
+			}
+
+			if (scoreImg === surprise) {
+				if (percentage.surprised70) {
+					if (emojis.surprisedEmoji == 0) {
+						var score2 = parseInt(localStorage.getItem('score'))
+						var updatedScore2 = score2 + 3
+						localStorage.setItem("score", updatedScore2);
+
+						setEmojis(prevState => ({
+							...prevState, surprisedEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							surprisedImg70: true,
+						}))
+					}
+
+				}
+			}
+
+			if (scoreImg === angry) {
+				if (percentage.angry70) {
+					if (emojis.angryEmoji == 0) {
+						var score3 = parseInt(localStorage.getItem('score'))
+						var updatedScore3 = score3 + 3
+						localStorage.setItem("score", updatedScore3);
+						setEmojis(prevState => ({
+							...prevState, angryEmoji: 1
+						}))
+						setImg(prevData => ({
+							...prevData,
+							angryImg70: true
+						}))
+					}
+
+				}
+			}
+
 		}
 
-		if(scoreImg === surprise){
-			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) 
-				{
-					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+3
-					localStorage.setItem("score",updatedScore2);
+		if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom))) {
 
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: true,
-						angryImg: false
-					}))
-				}
-
-			}
-		}
-
-		if(scoreImg === angry){
-			if(emoji.angryFace){
-				if (emojis.angryEmoji == 0) 
-				{
-					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+3
-					localStorage.setItem("score",updatedScore3);
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: false,
-						angryImg: true
-					}))
-				}
-
-			}
-		}}
-
-		if (((pleft < e2right) && (pright > e2left) && (pbottom > e2top) && (ptop < e2bottom)) ) {
-					
 			faceFxn()
-		// FOR SCORE IMAGE1
-		if(scoreImg1 === happy){
-			if(emoji.happyFace){
-				if (emojis.happyEmoji == 0) 
-				{
-					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+3
-					localStorage.setItem("score",updatedScore);
-					setEmojis(prevState => ({
-						...prevState, happyEmoji: 1
-					}))
-
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: true,
-						surprisedImg: false,
-						angryImg: false
-					}))
+				//FOR SCORE PERCENTAGE 30 
+				if (scoreImg === happy) {
+					if (percentage.happy30) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 1
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg30: true,
+							}))
+						}
+					}
 				}
-			}
-		}
-
-		if(scoreImg1 === surprise){
-			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) 
-				{
-					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+3
-					localStorage.setItem("score",updatedScore2);
-
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: true,
-						angryImg: false
-					}))
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised30) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 1
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg30: true,
+							}))
+						}
+	
+					}
 				}
-
-			}
-		}
-
-		if(scoreImg1 === angry){
-			if(emoji.angryFace){
-				if (emojis.angryEmoji == 0) 
-				{
-					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+3
-					localStorage.setItem("score",updatedScore3);
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: false,
-						angryImg: true
-					}))
+	
+				if (scoreImg === angry) {
+					if (percentage.angry30) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 1
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg30: true
+							}))
+						}
+	
+					}
 				}
-
-			}
+	
+				// FOR SCORE PERCENTAGE 50
+	
+				if (scoreImg === happy) {
+					if (percentage.happy50) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 2
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg50: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised50) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 2
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg50: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry50) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 2
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg50: true
+							}))
+						}
+	
+					}
+				}
+	
+				//FOR SCORE PERCENTAGE 70
+	
+				if (scoreImg === happy) {
+					if (percentage.happy70) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 3
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg70: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised70) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 3
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg70: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry70) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 3
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg70: true
+							}))
+						}
+	
+					}
+				}
 		}
-	}
 
 		//FOR SCORE IMAGE 2
-		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom)) ) {
-					
+		if (((pleft < e3right) && (pright > e3left) && (pbottom > e3top) && (ptop < e3bottom))) {
+
 			faceFxn()
-		if(scoreImg2 === happy){
-			if(emoji.happyFace){
-				if (emojis.happyEmoji == 0) 
-				{
-					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+3
-					localStorage.setItem("score",updatedScore);
-					setEmojis(prevState => ({
-						...prevState, happyEmoji: 1
-					}))
-
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: true,
-						surprisedImg: false,
-						angryImg: false
-					}))
+				//FOR SCORE PERCENTAGE 30 
+				if (scoreImg === happy) {
+					if (percentage.happy30) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 1
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg30: true,
+							}))
+						}
+					}
 				}
-			}
-		}
-
-		if(scoreImg2 === surprise){
-			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) 
-				{
-					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+3
-					localStorage.setItem("score",updatedScore2);
-
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: true,
-						angryImg: false
-					}))
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised30) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 1
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg30: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry30) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 1
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg30: true
+							}))
+						}
+	
+					}
+				}
+	
+				// FOR SCORE PERCENTAGE 50
+	
+				if (scoreImg === happy) {
+					if (percentage.happy50) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 2
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg50: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised50) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 2
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg50: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry50) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 2
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg50: true
+							}))
+						}
+	
+					}
+				}
+	
+				//FOR SCORE PERCENTAGE 70
+	
+				if (scoreImg === happy) {
+					if (percentage.happy70) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 3
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg70: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised70) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 3
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg70: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry70) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 3
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg70: true
+							}))
+						}
+	
+					}
 				}
 
-			}
 		}
 
-		if(scoreImg2 === angry){
-			if(emoji.angryFace){
-				if (emojis.angryEmoji == 0) 
-				{
-					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+3
-					localStorage.setItem("score",updatedScore3);
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: false,
-						angryImg: true
-					}))
-				}
+		if (((pleft < e4right) && (pright > e4left) && (pbottom > e4top) && (ptop < e4bottom))) {
 
-			}
-		}
-
-		}
-
-		if (((pleft < e4right) && (pright > e4left) && (pbottom > e4top) && (ptop < e4bottom)) ) {
-					
 			faceFxn()
-		if(scoreImg2 === happy){
-			if(emoji.happyFace){
-				if (emojis.happyEmoji == 0) 
-				{
-					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+3
-					localStorage.setItem("score",updatedScore);
-					setEmojis(prevState => ({
-						...prevState, happyEmoji: 1
-					}))
-
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: true,
-						surprisedImg: false,
-						angryImg: false
-					}))
+				//FOR SCORE PERCENTAGE 30 
+				if (scoreImg === happy) {
+					if (percentage.happy30) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 1
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg30: true,
+							}))
+						}
+					}
 				}
-			}
-		}
-
-		if(scoreImg2 === surprise){
-			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) 
-				{
-					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+3
-					localStorage.setItem("score",updatedScore2);
-
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: true,
-						angryImg: false
-					}))
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised30) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 1
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg30: true,
+							}))
+						}
+	
+					}
 				}
-
-			}
-		}
-
-		if(scoreImg2 === angry){
-			if(emoji.angryFace){
-				if (emojis.angryEmoji == 0) 
-				{
-					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+3
-					localStorage.setItem("score",updatedScore3);
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: false,
-						angryImg: true
-					}))
+	
+				if (scoreImg === angry) {
+					if (percentage.angry30) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 1
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg30: true
+							}))
+						}
+	
+					}
 				}
-
-			}
+	
+				// FOR SCORE PERCENTAGE 50
+	
+				if (scoreImg === happy) {
+					if (percentage.happy50) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 2
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg50: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised50) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 2
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg50: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry50) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 2
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg50: true
+							}))
+						}
+	
+					}
+				}
+	
+				//FOR SCORE PERCENTAGE 70
+	
+				if (scoreImg === happy) {
+					if (percentage.happy70) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 3
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg70: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised70) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 3
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg70: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry70) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 3
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg70: true
+							}))
+						}
+	
+					}
+				}
 		}
 
-		}
 
+		if (((pleft < e5right) && (pright > e5left) && (pbottom > e5top) && (ptop < e5bottom))) {
 
-		if (((pleft < e5right) && (pright > e5left) && (pbottom > e5top) && (ptop < e5bottom)) ) {
-					
 			faceFxn()
-		// FOR SCORE IMAGE1
-		if(scoreImg1 === happy){
-			if(emoji.happyFace){
-				if (emojis.happyEmoji == 0) 
-				{
-					var score = parseInt(localStorage.getItem('score'))
-					var updatedScore = score+3
-					localStorage.setItem("score",updatedScore);
-					setEmojis(prevState => ({
-						...prevState, happyEmoji: 1
-					}))
-
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: true,
-						surprisedImg: false,
-						angryImg: false
-					}))
+				//FOR SCORE PERCENTAGE 30 
+				if (scoreImg === happy) {
+					if (percentage.happy30) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 1
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg30: true,
+							}))
+						}
+					}
 				}
-			}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised30) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 1
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg30: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry30) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 1
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg30: true
+							}))
+						}
+	
+					}
+				}
+	
+				// FOR SCORE PERCENTAGE 50
+	
+				if (scoreImg === happy) {
+					if (percentage.happy50) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 2
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg50: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised50) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 2
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg50: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry50) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 2
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg50: true
+							}))
+						}
+	
+					}
+				}
+	
+				//FOR SCORE PERCENTAGE 70
+	
+				if (scoreImg === happy) {
+					if (percentage.happy70) {
+						if (emojis.happyEmoji == 0) {
+							var score = parseInt(localStorage.getItem('score'))
+							var updatedScore = score + 3
+							localStorage.setItem("score", updatedScore);
+							setEmojis(prevState => ({
+								...prevState, happyEmoji: 1
+							}))
+	
+							setImg(prevData => ({
+								...prevData,
+								happyImg70: true,
+							}))
+						}
+					}
+				}
+	
+				if (scoreImg === surprise) {
+					if (percentage.surprised70) {
+						if (emojis.surprisedEmoji == 0) {
+							var score2 = parseInt(localStorage.getItem('score'))
+							var updatedScore2 = score2 + 3
+							localStorage.setItem("score", updatedScore2);
+	
+							setEmojis(prevState => ({
+								...prevState, surprisedEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								surprisedImg70: true,
+							}))
+						}
+	
+					}
+				}
+	
+				if (scoreImg === angry) {
+					if (percentage.angry70) {
+						if (emojis.angryEmoji == 0) {
+							var score3 = parseInt(localStorage.getItem('score'))
+							var updatedScore3 = score3 + 3
+							localStorage.setItem("score", updatedScore3);
+							setEmojis(prevState => ({
+								...prevState, angryEmoji: 1
+							}))
+							setImg(prevData => ({
+								...prevData,
+								angryImg70: true
+							}))
+						}
+	
+					}
+				}
 		}
 
-		if(scoreImg1 === surprise){
-			if(emoji.surprisedFace){
-				if (emojis.surprisedEmoji == 0) 
-				{
-					var score2 = parseInt(localStorage.getItem('score'))
-					var updatedScore2 = score2+3
-					localStorage.setItem("score",updatedScore2);
+		// if (((pleft < e6right) && (pright > e6left) && (pbottom > e6top) && (ptop < e6bottom)) ) {
 
-					setEmojis(prevState => ({
-						...prevState, surprisedEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: true,
-						angryImg: false
-					}))
-				}
+		// 	faceFxn()
+		// 	 //FOR SCORE IMAGE 
+		// 	if(scoreImg === happy){
+		// 	if(emoji.happyFace){
+		// 		if (emojis.happyEmoji == 0) 
+		// 		{
+		// 			var score = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore = score+3
+		// 			localStorage.setItem("score",updatedScore);
+		// 			setEmojis(prevState => ({
+		// 				...prevState, happyEmoji: 1
+		// 			}))
 
-			}
-		}
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: true,
+		// 				surprisedImg: false,
+		// 				angryImg: false
+		// 			}))
+		// 		}
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }
 
-		if(scoreImg1 === angry){
-			if(emoji.angryFace){
-				if (emojis.angryEmoji == 0) 
-				{
-					var score3 = parseInt(localStorage.getItem('score'))
-					var updatedScore3 = score3+3
-					localStorage.setItem("score",updatedScore3);
-					setEmojis(prevState => ({
-						...prevState, angryEmoji: 1
-					}))
-					setImg(prevData => ({
-						...prevData, 
-						happyImg: false,
-						surprisedImg: false,
-						angryImg: true
-					}))
-				}
+		// if(scoreImg === surprise){
+		// 	if(emoji.surprisedFace){
+		// 		if (emojis.surprisedEmoji == 0) 
+		// 		{
+		// 			var score2 = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore2 = score2+3
+		// 			localStorage.setItem("score",updatedScore2);
 
-			}
-		}
-	}
+		// 			setEmojis(prevState => ({
+		// 				...prevState, surprisedEmoji: 1
+		// 			}))
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: false,
+		// 				surprisedImg: true,
+		// 				angryImg: false
+		// 			}))
+		// 		}
 
-	// if (((pleft < e6right) && (pright > e6left) && (pbottom > e6top) && (ptop < e6bottom)) ) {
-					
-	// 	faceFxn()
-	// 	 //FOR SCORE IMAGE 
-	// 	if(scoreImg === happy){
-	// 	if(emoji.happyFace){
-	// 		if (emojis.happyEmoji == 0) 
-	// 		{
-	// 			var score = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore = score+3
-	// 			localStorage.setItem("score",updatedScore);
-	// 			setEmojis(prevState => ({
-	// 				...prevState, happyEmoji: 1
-	// 			}))
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }
 
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: true,
-	// 				surprisedImg: false,
-	// 				angryImg: false
-	// 			}))
-	// 		}
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }
+		// if(scoreImg === angry){
+		// 	if(emoji.angryFace){
+		// 		if (emojis.angryEmoji == 0) 
+		// 		{
+		// 			var score3 = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore3 = score3+3
+		// 			localStorage.setItem("score",updatedScore3);
+		// 			setEmojis(prevState => ({
+		// 				...prevState, angryEmoji: 1
+		// 			}))
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: false,
+		// 				surprisedImg: false,
+		// 				angryImg: true
+		// 			}))
+		// 		}
 
-	// if(scoreImg === surprise){
-	// 	if(emoji.surprisedFace){
-	// 		if (emojis.surprisedEmoji == 0) 
-	// 		{
-	// 			var score2 = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore2 = score2+3
-	// 			localStorage.setItem("score",updatedScore2);
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }}
 
-	// 			setEmojis(prevState => ({
-	// 				...prevState, surprisedEmoji: 1
-	// 			}))
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: false,
-	// 				surprisedImg: true,
-	// 				angryImg: false
-	// 			}))
-	// 		}
+		// if (((pleft < e7right) && (pright > e7left) && (pbottom > e7top) && (ptop < e7bottom)) ) {
 
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }
+		// 	faceFxn()
+		// 	 //FOR SCORE IMAGE 
+		// 	if(scoreImg === happy){
+		// 	if(emoji.happyFace){
+		// 		if (emojis.happyEmoji == 0) 
+		// 		{
+		// 			var score = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore = score+3
+		// 			localStorage.setItem("score",updatedScore);
+		// 			setEmojis(prevState => ({
+		// 				...prevState, happyEmoji: 1
+		// 			}))
 
-	// if(scoreImg === angry){
-	// 	if(emoji.angryFace){
-	// 		if (emojis.angryEmoji == 0) 
-	// 		{
-	// 			var score3 = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore3 = score3+3
-	// 			localStorage.setItem("score",updatedScore3);
-	// 			setEmojis(prevState => ({
-	// 				...prevState, angryEmoji: 1
-	// 			}))
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: false,
-	// 				surprisedImg: false,
-	// 				angryImg: true
-	// 			}))
-	// 		}
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: true,
+		// 				surprisedImg: false,
+		// 				angryImg: false
+		// 			}))
+		// 		}
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }
 
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }}
+		// if(scoreImg === surprise){
+		// 	if(emoji.surprisedFace){
+		// 		if (emojis.surprisedEmoji == 0) 
+		// 		{
+		// 			var score2 = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore2 = score2+3
+		// 			localStorage.setItem("score",updatedScore2);
 
-	// if (((pleft < e7right) && (pright > e7left) && (pbottom > e7top) && (ptop < e7bottom)) ) {
-					
-	// 	faceFxn()
-	// 	 //FOR SCORE IMAGE 
-	// 	if(scoreImg === happy){
-	// 	if(emoji.happyFace){
-	// 		if (emojis.happyEmoji == 0) 
-	// 		{
-	// 			var score = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore = score+3
-	// 			localStorage.setItem("score",updatedScore);
-	// 			setEmojis(prevState => ({
-	// 				...prevState, happyEmoji: 1
-	// 			}))
+		// 			setEmojis(prevState => ({
+		// 				...prevState, surprisedEmoji: 1
+		// 			}))
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: false,
+		// 				surprisedImg: true,
+		// 				angryImg: false
+		// 			}))
+		// 		}
 
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: true,
-	// 				surprisedImg: false,
-	// 				angryImg: false
-	// 			}))
-	// 		}
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }
 
-	// if(scoreImg === surprise){
-	// 	if(emoji.surprisedFace){
-	// 		if (emojis.surprisedEmoji == 0) 
-	// 		{
-	// 			var score2 = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore2 = score2+3
-	// 			localStorage.setItem("score",updatedScore2);
+		// if(scoreImg === angry){
+		// 	if(emoji.angryFace){
+		// 		if (emojis.angryEmoji == 0) 
+		// 		{
+		// 			var score3 = parseInt(localStorage.getItem('score'))
+		// 			var updatedScore3 = score3+3
+		// 			localStorage.setItem("score",updatedScore3);
+		// 			setEmojis(prevState => ({
+		// 				...prevState, angryEmoji: 1
+		// 			}))
+		// 			setImg(prevData => ({
+		// 				...prevData, 
+		// 				happyImg: false,
+		// 				surprisedImg: false,
+		// 				angryImg: true
+		// 			}))
+		// 		}
 
-	// 			setEmojis(prevState => ({
-	// 				...prevState, surprisedEmoji: 1
-	// 			}))
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: false,
-	// 				surprisedImg: true,
-	// 				angryImg: false
-	// 			}))
-	// 		}
-
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }
-
-	// if(scoreImg === angry){
-	// 	if(emoji.angryFace){
-	// 		if (emojis.angryEmoji == 0) 
-	// 		{
-	// 			var score3 = parseInt(localStorage.getItem('score'))
-	// 			var updatedScore3 = score3+3
-	// 			localStorage.setItem("score",updatedScore3);
-	// 			setEmojis(prevState => ({
-	// 				...prevState, angryEmoji: 1
-	// 			}))
-	// 			setImg(prevData => ({
-	// 				...prevData, 
-	// 				happyImg: false,
-	// 				surprisedImg: false,
-	// 				angryImg: true
-	// 			}))
-	// 		}
-
-	// 	}else{
-	// 		gameOver()
-	// 	}
-	// }}
+		// 	}else{
+		// 		gameOver()
+		// 	}
+		// }}
 
 	}
 
@@ -775,135 +1375,132 @@ function Play() {
 		<div className="App HomeBody">
 
 			<div class='box'>
-					<img 
+				<img
 					style={{
 						height: 'auto',
 						width: '100%',
 						position: 'absolute',
 						display: 'flex',
 						zIndex: 1000,
-					}} 
+					}}
 					src={topbar} />
 
-					{
-						(img.happyImg || img.surprisedImg || img.angryImg)?
-						<img className='scoreImg' src={score3}/>
+				{
+					(img.happyImg30 || img.surprisedImg30 || img.angryImg30) ?
+						<img className='scoreImg' src={score1} />
 						:
 						null
-					}
-
-{/* {
-						(img.surprisedImg)?
-						<img className='scoreImg' src={score2}/>
-						:
-						null
-					}
+				}
 
 {
-						(img.angryImg)?
-						<img className='scoreImg'src={score3} />
+					(img.happyImg50 || img.surprisedImg50 || img.angryImg50) ?
+						<img className='scoreImg' src={score2} />
 						:
 						null
-					} */}
-					
+				}
+
+{
+					(img.happyImg70 || img.surprisedImg70 || img.angryImg70) ?
+						<img className='scoreImg' src={score3} />
+						:
+						null
+				}
+
 				<div style={{
 					display: 'flex'
 				}}>
-		<h2  style={{
-					position: 'absolute',
-					zIndex: 1001, 
-					left: 10,
-					fontSize: 26,
-					color: '#fff',
-					marginTop : 15,
-					marginLeft: 15
+					<h2 style={{
+						position: 'absolute',
+						zIndex: 1001,
+						left: 10,
+						fontSize: 26,
+						color: '#fff',
+						marginTop: 15,
+						marginLeft: 15
 					}} >
 						TIME
 						</h2>
-				<BorderLinearProgress className="right" style={{
-					width: 200,
-					marginLeft: 15,
-					marginTop: 10
-				}} 
-				variant="determinate" value={progress} />
-				
-				 <div style={{
-					 textAlign: 'end'
-				 }}>
+					<BorderLinearProgress className="right" style={{
+						width: 200,
+						marginLeft: 15,
+						marginTop: 10
+					}}
+						variant="determinate" value={progress} />
 
-			
-				<h2 style={{
-					position: 'absolute',
-					zIndex: 1001, 
-					right: 10,
-					fontSize: 26,
-					color: '#fff',
-					marginRight: 15
-					}} 
-					 >
-					 SCORE <br/> 
-					 <h2 style={{
-						 		 marginTop : 0,
-						 color: '#fff',
-						 fontSize: 45
-					 }}>{localStorage.getItem('score')}</h2>
-					 
-					</h2>
-					</div>
-					</div>
-				<audio className="audio-element">
-					<source src={audio} />
-				</audio>
-					<video
-						id='video1'
-						playsInline
-						muted
-						autoPlay
-						className="app__videoFeed"
-						style={{
-							position: 'absolute'
+					<div style={{
+						textAlign: 'end'
+					}}>
+
+
+						<h2 style={{
+							position: 'absolute',
+							zIndex: 1001,
+							right: 10,
+							fontSize: 26,
+							color: '#fff',
+							marginRight: 15
 						}}
-					/>
-					
+						>
+							SCORE <br />
+							<h2 style={{
+								marginTop: 0,
+								color: '#fff',
+								fontSize: 45
+							}}>{localStorage.getItem('score')}</h2>
+
+						</h2>
+					</div>
+				</div>
+				<video
+					id='video1'
+					playsInline
+					muted
+					autoPlay
+					className="app__videoFeed"
+					style={{
+						position: 'absolute'
+					}}
+				/>
+
 				<div className='container'>
 					<div className='emoji_bar'>
 						<div id='endDivConatainer'>
-						<div id='endDiv' className="emoji1" />
+							<div id='endDiv' className="emoji1" />
 						</div>
-						<div id='startDiv' className="emoji2"/>
+						<div id='startDiv' className="emoji2" />
 						<div className='motionDiv'>
-						<motion.div
-							initial={{ x: 500 }}
-							animate={{ x: -1500 }}
-							transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
-						>
+							<motion.div
+								initial={{ x: 500 }}
+								animate={{ x: -1500 }}
+								transition={{ ease: "linear", duration: timerAnimation, repeat: Infinity }}
+							>
 
-			{
-							loop && loop.map((l) => (
-								<>
-								<img id='div2' src={scoreImg} className="emoji"  style={{marginRight:80}} />
-								<img id='div3' src={scoreImg1} className="emoji"  style={{marginRight:80}} />
-								<img id='div4' src={scoreImg2} className="emoji"  style={{marginRight:80}} />
-								<img id='div5' src={scoreImg2} className="emoji"  style={{marginRight:80}} />
-								<img id='div6' src={scoreImg1} className="emoji"  style={{marginRight:80}} />
-								{/* <img id='div7' src={scoreImg} className="emoji"  style={{marginRight:80}} />
+								{
+									loop && loop.map((l) => (
+										<>
+											<img id='div2' src={scoreImg} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div3' src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div4' src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div5' src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div6' src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
+											{/* <img id='div7' src={scoreImg} className="emoji"  style={{marginRight:80}} />
 								<img id='div8' src={scoreImg} className="emoji"  style={{marginRight:80}} /> */}
-								</>
-								)
-								)
-							}
-							
-							{/* <img id='div2' src={happy} className="emoji"  style={{marginRight:80}} />
+										</>
+									)
+									)
+								}
+
+								{/* <img id='div2' src={happy} className="emoji"  style={{marginRight:80}} />
 							<img id='div3' src={surprise} className="emoji"  style={{marginRight:80}}/>
 							<img id='div5' src={happy} className="emoji"  style={{marginRight:100}} />
 							<img id='div4' src={angry} className="emoji" style={{marginRight:180}} />
 							<img id='div6' src={surprise} className="emoji"  style={{marginRight:80}}/>
 							<img id='div7' src={happy} className="emoji"  style={{marginRight:110}} />
 							<img id='div8' src={angry} className="emoji" style={{marginRight:170}} /> */}
-						</motion.div>
+							</motion.div>
 						</div>
 					</div>
-			
+
 				</div>
 				<img className="footer" src={footer} />
 			</div>

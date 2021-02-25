@@ -5,6 +5,7 @@ import './App.css';
 import { auth } from '../src/services/firebase/config';
 import {setEmail, setUsername} from '../src/store/profile'; 
 import {setAuth} from '../src/store/auth';
+import audio from './assets/sound/sad.mp3'
 import PrivateRoute from '../src/common/PrivateRoute';
 import Home from '../src/view/Home/Home' ;
 import Script from '../src/view/emojiDetection/Script';
@@ -16,6 +17,8 @@ import GameOver from './view/play/GameOver';
 function App() {
 const dispatch = useDispatch()
   useEffect(() => {
+    const audioEl = document.getElementsByClassName("audio-element")[0]
+		audioEl.play()
     auth.onAuthStateChanged(async user => {
       if(user){
       dispatch(setEmail(user.email))
@@ -30,7 +33,12 @@ const dispatch = useDispatch()
 
 
   return (
-   
+    <>
+    <div>
+    <audio className="audio-element">
+    <source src={audio} />
+  </audio>
+  </div>
 
     <Router>
     <Switch>
@@ -60,6 +68,7 @@ const dispatch = useDispatch()
       <PrivateRoute path="/gameover" component={GameOver} /> */}
     </Switch>
   </Router>
+  </>
   );
 }
 
