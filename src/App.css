@@ -133,12 +133,12 @@
   position: absolute;
   width:5px;
   height:3px;
-  margin-left: 10px;
+  margin-left: 15px;
   margin-top: 15px;
   border-radius:50%;
   border:3px solid #e65c00;
-  margin-right:10px
-  
+  margin-right:10px;
+  opacity: 0.1
 }
 
 .emoji2{
