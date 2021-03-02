@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
@@ -8,9 +8,14 @@ import topbar from '../../assets/Top & Bottom Bars/TopBarOg.png'
 import happy from '../../assets/Emojis/HappyEmoji.png';
 import angry from '../../assets/Emojis/AngryEmoji.png';
 import surprise from '../../assets/Emojis/SurprisedEmoji.png';
+import score0 from '../../assets/Scores/ScoreZero.png';
 import score1 from '../../assets/Scores/ScoreOkay+1.png';
 import score2 from '../../assets/Scores/ScoreGreat+2.png';
 import score3 from '../../assets/Scores/ScorePerfect+3.png';
+import score0Sound from '../../assets/sound/score0.mp3';
+import score1Sound from '../../assets/sound/score1.mp3';
+import score2Sound from '../../assets/sound/score2.mp3';
+import score3Sound from '../../assets/sound/score3.mp3';
 import { motion } from 'framer-motion';
 import { setHighScore, setScores } from '../../store/profile';
 import * as faceapi from "face-api.js"
@@ -36,6 +41,7 @@ function Play() {
 	const dispatch = useDispatch()
 	const history = useHistory()
 	const emoji = useSelector(state => state.emoji)
+	const [scoreImgZero, setScoreImgZero] = useState(false)
 	const [progress, setProgress] = useState(0);
 	const [scoreImg, setScoreImg] = useState([happy])
 	const [scoreImg1, setScoreImg1] = useState([angry])
@@ -76,6 +82,7 @@ function Play() {
 		surprised70: false,
 	})
 
+	const audioEl = document.getElementsByClassName("audio-element")[0]
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
@@ -185,32 +192,32 @@ function Play() {
 				const faceApi = async () => {
 					try {
 						const detections = await faceapi.detectAllFaces(video1, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-						if (detections[0].expressions.happy >=0.3 && detections[0].expressions.happy <= 0.5) {
-							// dispatch(setHappyFace(true));
+						if (detections[0].expressions.happy >= 0.3 && detections[0].expressions.happy <= 0.5) {
+							// dispatch(setHappyFace(true))
 							setPercentage((prevState) => ({
 								...prevState, happy30: true
 							}))
-						} else if (detections[0].expressions.angry >=0.3 && detections[0].expressions.angry <= 0.5) {
+						} else if (detections[0].expressions.angry >= 0.3 && detections[0].expressions.angry <= 0.5) {
 							// dispatch(setAngryFace(true))
 							setPercentage((prevState) => ({
 								...prevState, angry30: true
 							}))
-						} else if (detections[0].expressions.surpised >=0.3 && detections[0].expressions.surpised <= 0.5) {
+						} else if (detections[0].expressions.surpised >= 0.3 && detections[0].expressions.surpised <= 0.5) {
 							// dispatch(setSurprisedFace(true))
 							setPercentage((prevState) => ({
 								...prevState, surprised0: true
 							}))
-						} else if (detections[0].expressions.happy >=0.5 && detections[0].expressions.happy <= 0.7) {
+						} else if (detections[0].expressions.happy >= 0.5 && detections[0].expressions.happy <= 0.7) {
 							// dispatch(setHappyFace(true))
 							setPercentage((prevState) => ({
 								...prevState, happy50: true
 							}))
-						} else if (detections[0].expressions.angry >=0.5 && detections[0].expressions.angry <= 0.7) {
+						} else if (detections[0].expressions.angry >= 0.5 && detections[0].expressions.angry <= 0.7) {
 							// dispatch(setAngryFace(true))
 							setPercentage((prevState) => ({
 								...prevState, angry50: true
 							}))
-						} else if (detections[0].expressions.surpised >=0.5 && detections[0].expressions.surpised <= 0.7) {
+						} else if (detections[0].expressions.surpised >= 0.5 && detections[0].expressions.surpised <= 0.7) {
 							// dispatch(setSurprisedFace(true))
 							setPercentage((prevState) => ({
 								...prevState, surprised50: true
@@ -230,6 +237,8 @@ function Play() {
 							setPercentage((prevState) => ({
 								...prevState, surprised70: true
 							}))
+						} else {
+							setScoreImgZero(false)
 						}
 						//  else if (detections[0].expressions.sad >= 0.8) {
 						// 	console.log('sad face')
@@ -326,6 +335,9 @@ function Play() {
 				angry70: false,
 				surprised70: false,
 			}))
+
+			// setScoreZero(true)
+			setScoreImgZero(false)
 			// }
 		}
 
@@ -336,6 +348,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -348,12 +361,15 @@ function Play() {
 							happyImg30: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -367,12 +383,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -385,6 +404,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -393,6 +414,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -405,12 +427,15 @@ function Play() {
 							happyImg50: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -424,12 +449,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -442,6 +470,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -450,6 +480,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -462,12 +493,15 @@ function Play() {
 							happyImg70: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -481,12 +515,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -500,7 +537,12 @@ function Play() {
 					}
 
 				}
+			} else {
+				setScoreImgZero(true)
 			}
+
+		} else {
+			setScoreImgZero(false)
 
 		}
 
@@ -511,6 +553,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -523,12 +566,15 @@ function Play() {
 							happyImg30: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -542,12 +588,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -560,6 +609,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -568,6 +619,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -580,11 +632,14 @@ function Play() {
 							happyImg50: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
+					audioEl.play()
 					if (emojis.surprisedEmoji == 0) {
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
@@ -599,12 +654,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -617,6 +675,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -625,6 +685,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -637,12 +698,15 @@ function Play() {
 							happyImg70: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -656,12 +720,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -675,6 +742,8 @@ function Play() {
 					}
 
 				}
+			} else {
+				setScoreImgZero(true)
 			}
 		}
 
@@ -686,6 +755,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -698,12 +768,15 @@ function Play() {
 							happyImg30: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -717,12 +790,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -735,6 +811,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -743,6 +821,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -755,12 +834,15 @@ function Play() {
 							happyImg50: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -774,12 +856,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -792,6 +877,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -800,6 +887,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -812,12 +900,15 @@ function Play() {
 							happyImg70: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -831,12 +922,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -850,6 +944,8 @@ function Play() {
 					}
 
 				}
+			} else {
+				setScoreImgZero(true)
 			}
 
 		}
@@ -861,6 +957,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -873,12 +970,15 @@ function Play() {
 							happyImg30: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -892,12 +992,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -910,6 +1013,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -918,6 +1023,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -930,12 +1036,15 @@ function Play() {
 							happyImg50: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -949,12 +1058,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -967,6 +1079,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -975,6 +1089,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -987,12 +1102,15 @@ function Play() {
 							happyImg70: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -1006,12 +1124,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -1025,6 +1146,8 @@ function Play() {
 					}
 
 				}
+			} else {
+				setScoreImgZero(true)
 			}
 		}
 
@@ -1036,6 +1159,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -1048,12 +1172,15 @@ function Play() {
 							happyImg30: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -1067,12 +1194,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -1085,6 +1215,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -1093,6 +1225,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -1105,12 +1238,15 @@ function Play() {
 							happyImg50: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -1124,12 +1260,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -1142,6 +1281,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
@@ -1150,6 +1291,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
+						audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -1162,12 +1304,15 @@ function Play() {
 							happyImg70: true,
 						}))
 					}
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
+						audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -1181,12 +1326,15 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
+						audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -1199,6 +1347,8 @@ function Play() {
 						}))
 					}
 
+				} else {
+					setScoreImgZero(true)
 				}
 			}
 		}
@@ -1224,25 +1374,67 @@ function Play() {
 					src={topbar} />
 
 				{
-					(img.happyImg30 || img.surprisedImg30 || img.angryImg30) ?
-						<img className='scoreImg' src={score1} />
+
+					(scoreImgZero) ?
+						<>
+							<img className='scoreImg' src={score0} />
+							<audio className="audio-element">
+								<source src={score0Sound} />
+							</audio>
+						</>
 						:
-						null
+						(img.happyImg30 || img.surprisedImg30 || img.angryImg30) ?
+							<>
+								<img className='scoreImg' src={score1} />
+								<audio className="audio-element">
+									<source src={score1Sound} />
+								</audio>
+							</>
+							:
+							null
 				}
 
 				{
-					(img.happyImg50 || img.surprisedImg50 || img.angryImg50) ?
-						<img className='scoreImg' src={score2} />
+					(scoreImgZero) ?
+						<>
+							<img className='scoreImg' src={score0} />
+							<audio className="audio-element">
+								<source src={score0Sound} />
+							</audio>
+						</>
 						:
-						null
+						(img.happyImg50 || img.surprisedImg50 || img.angryImg50) ?
+							<>
+								<img className='scoreImg' src={score2} />
+								<audio className="audio-element">
+									<source src={score2Sound} />
+								</audio>
+							</>
+							:
+							null
 				}
 
 				{
-					(img.happyImg70 || img.surprisedImg70 || img.angryImg70) ?
-						<img className='scoreImg' src={score3} />
+					(scoreImgZero) ?
+						<>
+							<img className='scoreImg' src={score0} />
+							<audio className="audio-element">
+								<source src={score0Sound} />
+							</audio>
+						</>
 						:
-						null
+						(img.happyImg70 || img.surprisedImg70 || img.angryImg70) ?
+							<>
+								<img className='scoreImg' src={score3} />
+								<audio className="audio-element">
+									<source src={score3Sound} />
+								</audio>
+							</>
+							:
+
+							null
 				}
+
 
 				<div style={{
 					display: 'flex'
