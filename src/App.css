@@ -46,13 +46,14 @@
 
 .scoreImg{
   height: 200px;
-							width: 200px;
-							position: absolute;
-							display: flex;
-							z-index: 1015;  
-							margin-left: -15px;
-							margin-top: 30px;
+	width: 200px;
+	position: absolute;
+	display: flex;
+  z-index: 1015;  
+  margin-left: -15px;
+  margin-top: 30px;
 }
+
 .app__videoFeed {
   position: relative;
 	top: 0;
