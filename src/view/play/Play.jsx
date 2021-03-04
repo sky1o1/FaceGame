@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import useSound from 'use-sound';
 import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
@@ -16,9 +17,11 @@ import score0Sound from '../../assets/sound/score0.mp3';
 import score1Sound from '../../assets/sound/score1.mp3';
 import score2Sound from '../../assets/sound/score2.mp3';
 import score3Sound from '../../assets/sound/score3.mp3';
+import gamesong from '../../assets/sound/gamesong.mp3'
 import { motion } from 'framer-motion';
 import { setHighScore, setScores } from '../../store/profile';
 import * as faceapi from "face-api.js"
+import '../../assets/css/style.css'
 import { setHappyFace, setSadFace, setAngryFace, setSurprisedFace } from '../../store/emoji';
 
 
@@ -40,12 +43,14 @@ const BorderLinearProgress = withStyles((theme) => ({
 function Play() {
 	const dispatch = useDispatch()
 	const history = useHistory()
+	const [play] = useSound(gamesong)
 	const emoji = useSelector(state => state.emoji)
 	const [scoreImgZero, setScoreImgZero] = useState(false)
 	const [progress, setProgress] = useState(0);
 	const [scoreImg, setScoreImg] = useState([happy])
 	const [scoreImg1, setScoreImg1] = useState([angry])
 	const [scoreImg2, setScoreImg2] = useState([surprise])
+	
 	const [img, setImg] = useState({
 		happyImg30: false,
 		surprisedImg30: false,
@@ -82,10 +87,15 @@ function Play() {
 		surprised70: false,
 	})
 
-	const audioEl = document.getElementsByClassName("audio-element")[0]
+	const [score0audio] = useSound(score0Sound);
+	const [score1audio] = useSound(score1Sound);
+	const [score2audio] = useSound(score2Sound);
+	const [score3audio] = useSound(score3Sound);
+
 	const video1 = document.getElementById('video1')
 
 	useEffect(() => {
+		
 		const interval = setInterval(() => {
 			const randomArray = Math.floor(Math.random() * randomData.length);
 			const randomArray1 = Math.floor(Math.random() * randomData1.length);
@@ -157,6 +167,11 @@ function Play() {
 		};
 
 	}, []);
+
+	const scoreAudio0 = () => {
+		score0audio()
+		return 
+	}
 
 
 	const stopVideo = () => {
@@ -348,7 +363,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -369,7 +384,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -391,7 +406,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -414,7 +429,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -435,7 +450,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -457,7 +472,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -480,7 +495,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -501,7 +516,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -523,7 +538,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -553,7 +568,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -574,7 +589,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -596,7 +611,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -619,7 +634,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -639,7 +654,7 @@ function Play() {
 
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
-					audioEl.play()
+					// audioEl.play()
 					if (emojis.surprisedEmoji == 0) {
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
@@ -662,7 +677,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -685,7 +700,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -706,7 +721,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -728,7 +743,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -755,7 +770,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -776,7 +791,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -798,7 +813,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -821,7 +836,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -842,7 +857,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -864,7 +879,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -887,7 +902,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -908,7 +923,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -930,7 +945,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -957,7 +972,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -978,7 +993,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -1000,7 +1015,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -1023,7 +1038,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -1044,7 +1059,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -1066,7 +1081,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -1089,7 +1104,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -1110,7 +1125,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -1132,7 +1147,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -1159,7 +1174,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy30) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 1
 						localStorage.setItem("score", updatedScore);
@@ -1180,7 +1195,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised30) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 1
 						localStorage.setItem("score", updatedScore2);
@@ -1202,7 +1217,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry30) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 1
 						localStorage.setItem("score", updatedScore3);
@@ -1225,7 +1240,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy50) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 2
 						localStorage.setItem("score", updatedScore);
@@ -1246,7 +1261,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised50) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 2
 						localStorage.setItem("score", updatedScore2);
@@ -1268,7 +1283,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry50) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 2
 						localStorage.setItem("score", updatedScore3);
@@ -1291,7 +1306,7 @@ function Play() {
 			if (scoreImg === happy) {
 				if (percentage.happy70) {
 					if (emojis.happyEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score = parseInt(localStorage.getItem('score'))
 						var updatedScore = score + 3
 						localStorage.setItem("score", updatedScore);
@@ -1312,7 +1327,7 @@ function Play() {
 			if (scoreImg === surprise) {
 				if (percentage.surprised70) {
 					if (emojis.surprisedEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score2 = parseInt(localStorage.getItem('score'))
 						var updatedScore2 = score2 + 3
 						localStorage.setItem("score", updatedScore2);
@@ -1334,7 +1349,7 @@ function Play() {
 			if (scoreImg === angry) {
 				if (percentage.angry70) {
 					if (emojis.angryEmoji == 0) {
-						audioEl.play()
+						// audioEl.play()
 						var score3 = parseInt(localStorage.getItem('score'))
 						var updatedScore3 = score3 + 3
 						localStorage.setItem("score", updatedScore3);
@@ -1352,7 +1367,6 @@ function Play() {
 				}
 			}
 		}
-
 	}
 
 	useEffect(() => {
@@ -1374,21 +1388,16 @@ function Play() {
 					src={topbar} />
 
 				{
-
 					(scoreImgZero) ?
 						<>
 							<img className='scoreImg' src={score0} />
-							<audio className="audio-element">
-								<source src={score0Sound} />
-							</audio>
+							{ console.log('audio')}
 						</>
 						:
 						(img.happyImg30 || img.surprisedImg30 || img.angryImg30) ?
 							<>
 								<img className='scoreImg' src={score1} />
-								<audio className="audio-element">
-									<source src={score1Sound} />
-								</audio>
+								{() => score1audio()}
 							</>
 							:
 							null
@@ -1398,17 +1407,13 @@ function Play() {
 					(scoreImgZero) ?
 						<>
 							<img className='scoreImg' src={score0} />
-							<audio className="audio-element">
-								<source src={score0Sound} />
-							</audio>
+							{ () => scoreAudio0() }
 						</>
 						:
 						(img.happyImg50 || img.surprisedImg50 || img.angryImg50) ?
 							<>
 								<img className='scoreImg' src={score2} />
-								<audio className="audio-element">
-									<source src={score2Sound} />
-								</audio>
+								{() => score2audio()}
 							</>
 							:
 							null
@@ -1418,17 +1423,13 @@ function Play() {
 					(scoreImgZero) ?
 						<>
 							<img className='scoreImg' src={score0} />
-							<audio className="audio-element">
-								<source src={score0Sound} />
-							</audio>
+							{ () => scoreAudio0() }
 						</>
 						:
 						(img.happyImg70 || img.surprisedImg70 || img.angryImg70) ?
 							<>
 								<img className='scoreImg' src={score3} />
-								<audio className="audio-element">
-									<source src={score3Sound} />
-								</audio>
+								{() => score3audio()}
 							</>
 							:
 
