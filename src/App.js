@@ -15,7 +15,7 @@ function App() {
   const [play] = useSound(gamesong);
 
   useEffect(() => {
-    // play()
+    play()
     auth.onAuthStateChanged(async user => {
       if (user) {
         dispatch(setEmail(user.email))
