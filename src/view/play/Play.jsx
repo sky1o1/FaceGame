@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useSound from 'use-sound';
+import { v4 as uuidv4 } from 'uuid';
 import footer from '../../assets/Top & Bottom Bars/BottomBar.png';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ReactAudioPlayer from 'react-audio-player';
@@ -44,8 +45,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 function Play() {
 	const dispatch = useDispatch()
 	const history = useHistory()
-	const [play] = useSound(gamesong)
-	const emoji = useSelector(state => state.emoji)
+	// const emoji = useSelector(state => state.emoji)
 	const [scoreImgZero, setScoreImgZero] = useState(false)
 	const [progress, setProgress] = useState(0);
 	const [scoreImg, setScoreImg] = useState([happy])
@@ -87,11 +87,6 @@ function Play() {
 		angry70: false,
 		surprised70: false,
 	})
-
-	const [score0audio] = useSound(score0Sound);
-	const [score1audio] = useSound(score1Sound);
-	const [score2audio] = useSound(score2Sound);
-	const [score3audio] = useSound(score3Sound);
 
 	const video1 = document.getElementById('video1')
 
@@ -168,12 +163,6 @@ function Play() {
 		};
 
 	}, []);
-
-	const scoreAudio0 = () => {
-		score0audio()
-		return
-	}
-
 
 	const stopVideo = () => {
 		let video = document.getElementsByClassName('app__videoFeed')[0];
@@ -1375,7 +1364,7 @@ function Play() {
 	return (
 		<div className="App HomeBody">
 
-			<div class='box'>
+			<div className='box'>
 				<img
 					style={{
 						height: 'auto',
@@ -1390,7 +1379,6 @@ function Play() {
 					(scoreImgZero) ?
 						<>
 							<img className='scoreImg' src={score0} />
-							{/* {score0audio()} */}
 							<ReactAudioPlayer
 								src={score0Sound}
 								autoPlay
@@ -1525,14 +1513,14 @@ function Play() {
 							>
 
 								{
-									loop && loop.map((l) => (
+									loop && loop.map((l, index) => (
 										<>
-											<img id='div2' src={scoreImg} className="emoji" style={{ marginRight: 80 }} />
-											<img id='div2' src={scoreImg} className="emoji" style={{ marginRight: 80 }} />
-											<img id='div3' src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
-											<img id='div4' src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
-											<img id='div5' src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
-											<img id='div6' src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div2' key={uuidv4()} src={scoreImg} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div2' key={uuidv4()} src={scoreImg} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div3' key={uuidv4()} src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div4' key={uuidv4()} src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div5' key={uuidv4()} src={scoreImg2} className="emoji" style={{ marginRight: 80 }} />
+											<img id='div6' key={uuidv4()} src={scoreImg1} className="emoji" style={{ marginRight: 80 }} />
 										</>
 									)
 									)
