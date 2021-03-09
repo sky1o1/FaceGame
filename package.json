@@ -9,7 +9,7 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
     "face-api.js": "^0.22.2",
-    "firebase": "^8.2.5",
+    "firebase": "^8.2.10",
     "firebaseui": "^4.7.1",
     "formik": "^2.2.6",
     "framer-motion": "^3.3.0-beta.22",
